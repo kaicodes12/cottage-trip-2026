@@ -1,0 +1,2526 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Squad Cottage 2026 🏕️</title>
+<link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Nunito:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<!-- Firebase SDK -->
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-database-compat.js"></script>
+<style>
+:root {
+  --cream: #faf5ec;
+  --parchment: #f0e8d5;
+  --bark: #6b4c36;
+  --bark-light: #9b7456;
+  --forest: #2c4a34;
+  --forest-light: #3d6347;
+  --moss: #5a7a4a;
+  --rust: #b5491e;
+  --rust-light: #d4622d;
+  --gold: #c9913d;
+  --gold-light: #e2b05a;
+  --lake: #4a7fa0;
+  --lake-light: #6ba3c0;
+  --sand: #e8d9bc;
+  --mist: #e8efe4;
+  --charcoal: #2a2a28;
+  --text: #3a3028;
+  --text-soft: #7a6a58;
+  --card-bg: #fffdf8;
+}
+
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: 'Nunito', sans-serif;
+  background: var(--cream);
+  color: var(--text);
+  cursor: default;
+}
+
+/* ═══════════════════════════ HERO ═══════════════════════════ */
+.hero {
+  min-height: 100vh;
+  background: var(--forest);
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+}
+
+.hero-slideshow {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+}
+.slide {
+  position: absolute;
+  inset: 0;
+  background-size: cover;
+  background-position: center;
+  opacity: 0;
+  transition: opacity 1.8s ease;
+}
+.slide.active { opacity: 1; }
+.hero-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    180deg,
+    rgba(28,50,34,0.6) 0%,
+    rgba(28,50,34,0.3) 40%,
+    rgba(22,38,28,0.85) 100%
+  );
+  z-index: 1;
+}
+
+/* grain texture */
+.grain {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 9999;
+  opacity: 0.035;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-repeat: repeat;
+  background-size: 150px;
+}
+
+.hero-content {
+  position: relative;
+  z-index: 2;
+  text-align: center;
+}
+
+.hero-badge {
+  display: inline-block;
+  background: rgba(201,145,61,0.25);
+  border: 1px solid rgba(201,145,61,0.5);
+  color: var(--gold-light);
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  padding: 6px 20px;
+  border-radius: 100px;
+  margin-bottom: 1.5rem;
+  backdrop-filter: blur(6px);
+  animation: fadeUp 0.8s ease forwards;
+  opacity: 0;
+}
+
+.hero-title {
+  font-family: 'Lora', serif;
+  font-size: clamp(3.2rem, 9vw, 8rem);
+  font-weight: 700;
+  color: var(--cream);
+  line-height: 0.95;
+  margin-bottom: 1rem;
+  animation: fadeUp 0.8s 0.15s ease forwards;
+  opacity: 0;
+}
+.hero-title em {
+  font-style: italic;
+  color: var(--gold-light);
+}
+
+.hero-dates {
+  font-size: 1.1rem;
+  color: rgba(250,245,236,0.65);
+  font-weight: 300;
+  letter-spacing: 0.12em;
+  margin-bottom: 2.5rem;
+  animation: fadeUp 0.8s 0.3s ease forwards;
+  opacity: 0;
+}
+
+.hero-pills {
+  display: flex;
+  gap: 0.75rem;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-bottom: 3rem;
+  animation: fadeUp 0.8s 0.45s ease forwards;
+  opacity: 0;
+}
+.hero-pill {
+  background: rgba(255,255,255,0.1);
+  border: 1px solid rgba(255,255,255,0.2);
+  backdrop-filter: blur(8px);
+  color: var(--cream);
+  padding: 8px 18px;
+  border-radius: 100px;
+  font-size: 0.85rem;
+  font-weight: 500;
+}
+
+.hero-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  background: var(--rust);
+  color: white;
+  padding: 14px 32px;
+  border-radius: 100px;
+  font-size: 0.85rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  text-decoration: none;
+  transition: all 0.3s;
+  animation: fadeUp 0.8s 0.6s ease forwards;
+  opacity: 0;
+  box-shadow: 0 8px 32px rgba(181,73,30,0.4);
+}
+.hero-cta:hover {
+  background: var(--rust-light);
+  transform: translateY(-2px);
+  box-shadow: 0 12px 40px rgba(181,73,30,0.5);
+}
+
+.slide-indicators {
+  position: absolute;
+  bottom: 2rem;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 2;
+  display: flex;
+  gap: 6px;
+}
+.slide-dot {
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.35);
+  cursor: pointer;
+  transition: all 0.3s;
+  border: none;
+}
+.slide-dot.active { background: var(--gold-light); width: 22px; border-radius: 3px; }
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* ═══════════════════════════ STICKY NAV ═══════════════════════════ */
+.sticky-nav {
+  position: sticky;
+  top: 0;
+  z-index: 500;
+  background: var(--forest);
+  border-bottom: 1px solid rgba(255,255,255,0.08);
+  padding: 0.75rem 1.5rem;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+}
+
+.nav-logo {
+  font-family: 'Lora', serif;
+  font-style: italic;
+  color: var(--gold-light);
+  font-size: 1.15rem;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.nav-spacer { flex: 1; }
+
+.group-widget {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(255,255,255,0.07);
+  border: 1px solid rgba(255,255,255,0.14);
+  border-radius: 100px;
+  padding: 5px 12px 5px 8px;
+}
+.group-widget span {
+  color: rgba(250,245,236,0.6);
+  font-size: 0.78rem;
+}
+.group-widget strong {
+  color: var(--gold-light);
+  font-size: 1rem;
+  min-width: 20px;
+  text-align: center;
+}
+.group-btn {
+  background: none;
+  border: 1px solid rgba(255,255,255,0.2);
+  color: var(--gold-light);
+  width: 26px; height: 26px;
+  border-radius: 50%;
+  font-size: 1rem;
+  line-height: 1;
+  cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  transition: all 0.2s;
+}
+.group-btn:hover { background: rgba(255,255,255,0.1); }
+
+.nav-tabs {
+  display: flex;
+  gap: 4px;
+}
+.nav-tab {
+  background: none;
+  border: 1px solid rgba(255,255,255,0.15);
+  color: rgba(250,245,236,0.55);
+  border-radius: 100px;
+  padding: 5px 14px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-family: 'Nunito', sans-serif;
+}
+.nav-tab.active, .nav-tab:hover {
+  background: var(--gold);
+  border-color: var(--gold);
+  color: var(--forest);
+}
+
+.compare-toggle {
+  background: none;
+  border: 1px solid rgba(255,255,255,0.15);
+  color: rgba(250,245,236,0.55);
+  border-radius: 100px;
+  padding: 5px 14px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-family: 'Nunito', sans-serif;
+  white-space: nowrap;
+}
+.compare-toggle.active {
+  background: var(--lake);
+  border-color: var(--lake);
+  color: white;
+}
+
+/* ═══════════════════════════ SECTION HEADERS ═══════════════════════════ */
+.section {
+  padding: 4rem 1.5rem;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.section-eyebrow {
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--rust);
+  margin-bottom: 0.5rem;
+}
+.section-title {
+  font-family: 'Lora', serif;
+  font-size: 2rem;
+  color: var(--forest);
+  margin-bottom: 0.4rem;
+}
+.section-sub {
+  color: var(--text-soft);
+  font-size: 0.85rem;
+  margin-bottom: 2.5rem;
+}
+
+/* ═══════════════════════════ MAP SECTION ═══════════════════════════ */
+.map-section-wrap {
+  background: var(--parchment);
+  padding: 4rem 0 0;
+}
+
+.map-container {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 1.5rem 3rem;
+}
+
+.map-canvas-wrap {
+  position: relative;
+  width: 100%;
+  height: 420px;
+  background: #c8dce8;
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow: 0 8px 40px rgba(0,0,0,0.1);
+}
+
+.map-svg {
+  width: 100%;
+  height: 100%;
+}
+
+.map-pin {
+  cursor: pointer;
+  transition: transform 0.2s;
+  transform-origin: center bottom;
+}
+.map-pin:hover { transform: scale(1.25); }
+.map-pin.highlight .pin-circle { fill: var(--rust); }
+
+.map-tooltip {
+  position: absolute;
+  background: white;
+  border-radius: 12px;
+  padding: 10px 14px;
+  font-size: 0.78rem;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.15);
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.2s;
+  max-width: 200px;
+  z-index: 10;
+  border-left: 3px solid var(--rust);
+}
+.map-tooltip.show { opacity: 1; }
+.map-tooltip-title { font-weight: 700; color: var(--forest); margin-bottom: 2px; }
+.map-tooltip-area { color: var(--text-soft); font-size: 0.72rem; }
+.map-tooltip-drive { color: var(--rust); font-weight: 600; font-size: 0.75rem; margin-top: 4px; }
+
+.drive-legend {
+  display: flex;
+  gap: 1.5rem;
+  margin-top: 1.2rem;
+  flex-wrap: wrap;
+}
+.drive-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.78rem;
+  color: var(--text-soft);
+}
+.drive-dot {
+  width: 10px; height: 10px;
+  border-radius: 50%;
+}
+
+/* ═══════════════════════════ LISTINGS ═══════════════════════════ */
+.listings-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
+  gap: 1.75rem;
+}
+
+/* ═══════ CARD ═══════ */
+.card {
+  background: var(--card-bg);
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow: 0 2px 16px rgba(0,0,0,0.06);
+  transition: transform 0.35s ease, box-shadow 0.35s ease;
+  position: relative;
+  border: 1px solid rgba(0,0,0,0.04);
+}
+.card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 14px 48px rgba(0,0,0,0.11);
+}
+
+/* Rank badge when sorted */
+.rank-badge {
+  position: absolute;
+  top: 14px;
+  left: 14px;
+  z-index: 5;
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Lora', serif;
+  font-weight: 700;
+  font-size: 1rem;
+  color: white;
+  box-shadow: 0 3px 12px rgba(0,0,0,0.25);
+  border: 2.5px solid white;
+}
+.rank-badge.rank-1 { background: var(--gold); width: 44px; height: 44px; font-size: 1.15rem; }
+.rank-badge.rank-2 { background: var(--bark-light); }
+.rank-badge.rank-3 { background: var(--forest-light); }
+.rank-badge.rank-rest { background: var(--text-soft); width: 34px; height: 34px; font-size: 0.85rem; }
+.card.compare-selected {
+  outline: 2.5px solid var(--lake);
+  outline-offset: 2px;
+}
+
+/* gallery */
+.card-gallery {
+  position: relative;
+  height: 250px;
+  background: var(--sand);
+  overflow: hidden;
+}
+.gallery-img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0;
+  transition: opacity 0.5s ease;
+}
+.gallery-img.active { opacity: 1; }
+.gallery-arrow-btn {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: rgba(255,255,255,0.88);
+  border: none;
+  width: 32px; height: 32px;
+  border-radius: 50%;
+  cursor: pointer;
+  font-size: 0.85rem;
+  display: flex; align-items: center; justify-content: center;
+  z-index: 5;
+  opacity: 0;
+  transition: opacity 0.2s;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.12);
+}
+.card-gallery:hover .gallery-arrow-btn { opacity: 1; }
+.gallery-arrow-btn.left { left: 8px; }
+.gallery-arrow-btn.right { right: 8px; }
+.gallery-dots {
+  position: absolute;
+  bottom: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 4px;
+  z-index: 5;
+}
+.g-dot {
+  width: 5px; height: 5px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.5);
+  cursor: pointer;
+  border: none;
+  transition: all 0.2s;
+}
+.g-dot.active { background: white; width: 14px; border-radius: 3px; }
+
+/* card badges */
+.card-badges {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  z-index: 4;
+}
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 3px 9px;
+  border-radius: 100px;
+  font-size: 0.64rem;
+  font-weight: 800;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  backdrop-filter: blur(10px);
+}
+.badge-kais { background: var(--rust); color: white; }
+.badge-fave { background: rgba(28,50,34,0.9); color: var(--gold-light); }
+.badge-compare { background: var(--lake); color: white; }
+
+.save-btn {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: rgba(255,255,255,0.88);
+  border: none;
+  width: 34px; height: 34px;
+  border-radius: 50%;
+  font-size: 0.95rem;
+  cursor: pointer;
+  z-index: 4;
+  display: flex; align-items: center; justify-content: center;
+  transition: transform 0.2s;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+.save-btn:hover { transform: scale(1.2); }
+
+.compare-check {
+  position: absolute;
+  bottom: 10px;
+  right: 10px;
+  background: rgba(255,255,255,0.88);
+  border: 2px solid rgba(74,127,160,0.4);
+  width: 26px; height: 26px;
+  border-radius: 6px;
+  font-size: 0.7rem;
+  cursor: pointer;
+  z-index: 4;
+  display: flex; align-items: center; justify-content: center;
+  transition: all 0.2s;
+  color: transparent;
+}
+.compare-check.checked {
+  background: var(--lake);
+  border-color: var(--lake);
+  color: white;
+}
+.compare-mode .compare-check { display: flex; }
+.compare-check { display: none; }
+
+/* card body */
+.card-body { padding: 1.2rem 1.4rem; }
+.card-area {
+  font-size: 0.67rem;
+  font-weight: 800;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--rust);
+  margin-bottom: 0.3rem;
+}
+.card-title {
+  font-family: 'Lora', serif;
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: var(--charcoal);
+  margin-bottom: 0.5rem;
+  line-height: 1.2;
+}
+
+.vibe-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  margin-bottom: 0.75rem;
+}
+.vibe-tag {
+  background: var(--mist);
+  color: var(--forest-light);
+  border-radius: 100px;
+  padding: 2px 9px;
+  font-size: 0.65rem;
+  font-weight: 600;
+}
+
+.amenity-checks {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px 10px;
+  margin-bottom: 0.9rem;
+}
+.amenity {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 0.7rem;
+  color: var(--text-soft);
+}
+.amenity.has { color: var(--forest-light); font-weight: 600; }
+.amenity-icon { font-size: 0.75rem; }
+
+.card-stats {
+  display: flex;
+  gap: 1rem;
+  font-size: 0.75rem;
+  color: var(--text-soft);
+  margin-bottom: 0.9rem;
+  padding-bottom: 0.9rem;
+  border-bottom: 1px solid var(--sand);
+}
+.card-stat { display: flex; align-items: center; gap: 3px; }
+
+.card-footer {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 0.75rem;
+}
+
+.price-block { flex: 1; min-width: 0; }
+.price-main {
+  font-family: 'Lora', serif;
+  font-size: 1.6rem;
+  font-weight: 700;
+  color: var(--forest);
+  line-height: 1;
+}
+.price-main span { font-size: 0.8rem; font-family: 'Nunito', sans-serif; font-weight: 400; color: var(--text-soft); }
+.price-total { font-size: 0.72rem; color: var(--text-soft); margin-top: 1px; }
+.price-person {
+  font-size: 0.73rem;
+  font-weight: 700;
+  color: var(--lake);
+  margin-top: 2px;
+}
+
+.drive-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  background: var(--parchment);
+  border-radius: 8px;
+  padding: 4px 8px;
+  font-size: 0.68rem;
+  font-weight: 700;
+  color: var(--bark);
+  margin-top: 4px;
+}
+
+.vote-row {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 5px;
+}
+.vote-btns { display: flex; gap: 4px; }
+.vote-btn {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 5px 12px;
+  border-radius: 100px;
+  border: 1.5px solid;
+  font-size: 0.75rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-family: 'Nunito', sans-serif;
+}
+.vote-up {
+  border-color: var(--forest);
+  color: var(--forest);
+  background: transparent;
+}
+.vote-up.active, .vote-up:hover {
+  background: var(--forest);
+  color: white;
+}
+.vote-down {
+  border-color: #ddd;
+  color: #aaa;
+  background: transparent;
+  padding: 5px 10px;
+}
+.vote-down.active, .vote-down:hover {
+  background: #ffe8e8;
+  border-color: #e57373;
+  color: #c62828;
+}
+
+.airbnb-link {
+  font-size: 0.68rem;
+  font-weight: 700;
+  color: var(--rust);
+  text-decoration: none;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  transition: color 0.2s;
+  white-space: nowrap;
+}
+.airbnb-link:hover { color: var(--rust-light); }
+
+/* ═══════════════════════════ REACTIONS ═══════════════════════════ */
+.reactions-strip {
+  border-top: 1px solid var(--sand);
+  padding: 0.75rem 1.4rem;
+  background: var(--cream);
+}
+.reactions-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+  margin-bottom: 0.5rem;
+}
+.react-btn {
+  background: none;
+  border: 1px solid var(--sand);
+  border-radius: 100px;
+  padding: 3px 10px;
+  font-size: 0.82rem;
+  cursor: pointer;
+  transition: all 0.15s;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+.react-btn:hover, .react-btn.reacted {
+  background: var(--parchment);
+  border-color: var(--gold);
+  transform: scale(1.08);
+}
+.react-count { font-size: 0.65rem; color: var(--text-soft); font-weight: 700; }
+.react-add {
+  background: none;
+  border: 1px dashed var(--sand);
+  border-radius: 100px;
+  padding: 3px 8px;
+  font-size: 0.75rem;
+  cursor: pointer;
+  color: var(--text-soft);
+  transition: all 0.15s;
+}
+.react-add:hover { border-color: var(--gold); color: var(--gold); }
+
+.comment-area {
+  display: flex;
+  gap: 6px;
+  margin-top: 0.4rem;
+}
+.comment-input {
+  flex: 1;
+  border: 1px solid var(--sand);
+  border-radius: 100px;
+  padding: 5px 12px;
+  font-size: 0.75rem;
+  font-family: 'Nunito', sans-serif;
+  background: white;
+  color: var(--text);
+  outline: none;
+  transition: border-color 0.2s;
+}
+.comment-input:focus { border-color: var(--bark-light); }
+.comment-submit {
+  background: var(--forest);
+  color: white;
+  border: none;
+  border-radius: 100px;
+  padding: 5px 14px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background 0.2s;
+  font-family: 'Nunito', sans-serif;
+}
+.comment-submit:hover { background: var(--forest-light); }
+
+.comments-list {
+  margin-top: 0.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.comment-item {
+  background: white;
+  border-radius: 10px;
+  padding: 5px 10px;
+  font-size: 0.72rem;
+  color: var(--text);
+  border-left: 2px solid var(--gold);
+  animation: fadeIn 0.3s ease;
+}
+@keyframes fadeIn { from { opacity: 0; transform: translateY(-4px); } to { opacity: 1; } }
+
+/* ═══════════════════════════ LIGHTBOX ═══════════════════════════ */
+.lightbox {
+  position: fixed;
+  inset: 0;
+  background: rgba(22,30,24,0.95);
+  z-index: 2000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s;
+}
+.lightbox.open { opacity: 1; pointer-events: all; }
+.lb-inner {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  max-width: 92vw;
+  max-height: 95vh;
+}
+.lb-img {
+  max-width: 88vw;
+  max-height: 78vh;
+  object-fit: contain;
+  border-radius: 14px;
+}
+.lb-close {
+  position: absolute;
+  top: -48px;
+  right: 0;
+  background: none;
+  border: 1.5px solid rgba(255,255,255,0.3);
+  color: white;
+  width: 38px; height: 38px;
+  border-radius: 50%;
+  font-size: 1.1rem;
+  cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  transition: all 0.2s;
+}
+.lb-close:hover { background: rgba(255,255,255,0.12); }
+.lb-caption {
+  color: rgba(255,255,255,0.5);
+  font-size: 0.82rem;
+  letter-spacing: 0.05em;
+  text-align: center;
+}
+.lb-arrows {
+  display: flex;
+  gap: 1rem;
+}
+.lb-arrow {
+  background: rgba(255,255,255,0.08);
+  border: 1.5px solid rgba(255,255,255,0.2);
+  color: white;
+  width: 46px; height: 46px;
+  border-radius: 50%;
+  font-size: 1.1rem;
+  cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  transition: all 0.2s;
+}
+.lb-arrow:hover { background: rgba(255,255,255,0.16); }
+
+/* ═══════════════════════════ LEADERBOARD ═══════════════════════════ */
+.leaderboard-wrap {
+  background: var(--forest);
+  padding: 4rem 1.5rem;
+}
+.leaderboard-inner {
+  max-width: 760px;
+  margin: 0 auto;
+}
+.lb-title {
+  font-family: 'Lora', serif;
+  font-size: 2rem;
+  color: var(--cream);
+  text-align: center;
+  margin-bottom: 0.3rem;
+}
+.lb-sub {
+  color: rgba(250,245,236,0.4);
+  text-align: center;
+  font-size: 0.82rem;
+  margin-bottom: 2.5rem;
+  letter-spacing: 0.08em;
+}
+.lb-list { display: flex; flex-direction: column; gap: 0.7rem; }
+.lb-row {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  background: rgba(255,255,255,0.055);
+  border: 1px solid rgba(255,255,255,0.06);
+  border-radius: 14px;
+  padding: 1rem 1.25rem;
+  transition: background 0.2s;
+}
+.lb-row:hover { background: rgba(255,255,255,0.08); }
+.lb-pos {
+  font-family: 'Lora', serif;
+  font-size: 1.5rem;
+  font-weight: 700;
+  min-width: 40px;
+  text-align: center;
+}
+.lb-info { flex: 1; }
+.lb-name { font-weight: 700; color: var(--cream); font-size: 0.92rem; }
+.lb-area { font-size: 0.7rem; color: rgba(250,245,236,0.35); letter-spacing: 0.1em; text-transform: uppercase; margin-top: 1px; }
+.lb-bar-bg {
+  width: 100px;
+  height: 5px;
+  background: rgba(255,255,255,0.08);
+  border-radius: 3px;
+  overflow: hidden;
+}
+.lb-bar-fill {
+  height: 100%;
+  background: var(--gold);
+  border-radius: 3px;
+  transition: width 0.7s ease;
+}
+.lb-score { font-size: 0.82rem; color: var(--gold-light); font-weight: 700; min-width: 65px; text-align: right; }
+
+/* ═══════════════════════════ COMPARE PANEL ═══════════════════════════ */
+.compare-panel {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 600;
+  background: var(--charcoal);
+  border-top: 2px solid var(--lake);
+  padding: 1rem 2rem;
+  display: none;
+  flex-direction: column;
+  gap: 0.5rem;
+  box-shadow: 0 -8px 40px rgba(0,0,0,0.3);
+}
+.compare-panel.show { display: flex; }
+.compare-panel-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.compare-panel-title {
+  color: var(--cream);
+  font-weight: 700;
+  font-size: 0.9rem;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.compare-selected-count {
+  background: var(--lake);
+  color: white;
+  width: 22px; height: 22px;
+  border-radius: 50%;
+  font-size: 0.72rem;
+  display: flex; align-items: center; justify-content: center;
+  font-weight: 800;
+}
+.compare-go-btn {
+  background: var(--lake);
+  color: white;
+  border: none;
+  border-radius: 100px;
+  padding: 7px 20px;
+  font-size: 0.78rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background 0.2s;
+  font-family: 'Nunito', sans-serif;
+}
+.compare-go-btn:hover { background: var(--lake-light); }
+.compare-go-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+.compare-chips {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.compare-chip {
+  background: rgba(255,255,255,0.08);
+  border: 1px solid rgba(74,127,160,0.4);
+  border-radius: 100px;
+  padding: 3px 12px;
+  font-size: 0.72rem;
+  color: var(--cream);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.compare-chip button {
+  background: none;
+  border: none;
+  color: rgba(255,255,255,0.4);
+  cursor: pointer;
+  font-size: 0.75rem;
+  transition: color 0.15s;
+}
+.compare-chip button:hover { color: white; }
+
+/* ═══════════════════════════ COMPARE MODAL ═══════════════════════════ */
+.compare-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 2000;
+  background: rgba(22,30,24,0.96);
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  overflow-y: auto;
+  padding: 2rem;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s;
+}
+.compare-modal.open { opacity: 1; pointer-events: all; }
+.compare-modal-inner {
+  background: var(--cream);
+  border-radius: 20px;
+  overflow: hidden;
+  width: 100%;
+  max-width: 1100px;
+  margin: auto;
+}
+.compare-modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1.25rem 1.75rem;
+  background: var(--forest);
+}
+.compare-modal-header h2 {
+  font-family: 'Lora', serif;
+  color: var(--cream);
+  font-size: 1.3rem;
+}
+.modal-close-btn {
+  background: none;
+  border: 1.5px solid rgba(255,255,255,0.25);
+  color: white;
+  width: 34px; height: 34px;
+  border-radius: 50%;
+  cursor: pointer;
+  font-size: 1rem;
+  display: flex; align-items: center; justify-content: center;
+  transition: all 0.2s;
+}
+.modal-close-btn:hover { background: rgba(255,255,255,0.1); }
+
+.compare-table { width: 100%; overflow-x: auto; }
+.compare-cols {
+  display: grid;
+  grid-template-columns: 160px repeat(var(--cols), 1fr);
+  min-width: 600px;
+}
+.compare-col-header {
+  background: white;
+  padding: 1rem;
+  text-align: center;
+  border-bottom: 2px solid var(--sand);
+}
+.compare-col-header img {
+  width: 100%;
+  height: 110px;
+  object-fit: cover;
+  border-radius: 12px;
+  margin-bottom: 0.6rem;
+}
+.compare-col-header .col-title {
+  font-family: 'Lora', serif;
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: var(--charcoal);
+  line-height: 1.2;
+}
+.compare-col-header .col-area {
+  font-size: 0.65rem;
+  color: var(--text-soft);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  margin-top: 2px;
+}
+.compare-row-label {
+  padding: 0.7rem 1rem;
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--text-soft);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  background: var(--parchment);
+  border-bottom: 1px solid var(--sand);
+  display: flex;
+  align-items: center;
+}
+.compare-row-label:nth-child(odd) { background: var(--cream); }
+.compare-cell {
+  padding: 0.7rem 1rem;
+  text-align: center;
+  font-size: 0.82rem;
+  color: var(--text);
+  border-bottom: 1px solid var(--sand);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.compare-cell:nth-child(odd) { background: white; }
+.compare-cell.best { color: var(--forest); font-weight: 800; }
+.compare-cell.has { color: var(--moss); }
+.compare-cell.no { color: #ccc; }
+
+/* ═══════════════════════════ ADD LISTING ═══════════════════════════ */
+.add-listing-btn {
+  background: var(--forest);
+  color: white;
+  border: none;
+  padding: 7px 16px;
+  border-radius: 20px;
+  font-family: 'Nunito', sans-serif;
+  font-weight: 700;
+  font-size: 0.78rem;
+  cursor: pointer;
+  transition: background 0.2s;
+  white-space: nowrap;
+}
+.add-listing-btn:hover { background: var(--forest-light); }
+
+.add-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.5);
+  backdrop-filter: blur(4px);
+  z-index: 9999;
+  display: none;
+  align-items: center;
+  justify-content: center;
+}
+.add-modal-overlay.show { display: flex; }
+
+.add-modal {
+  background: var(--card-bg);
+  border-radius: 24px;
+  padding: 2.5rem;
+  max-width: 480px;
+  width: 90%;
+  box-shadow: 0 24px 80px rgba(0,0,0,0.25);
+  position: relative;
+}
+.add-modal-close {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  background: none;
+  border: none;
+  font-size: 1.3rem;
+  cursor: pointer;
+  color: var(--text-soft);
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.add-modal-close:hover { background: var(--parchment); }
+.add-modal h2 {
+  font-family: 'Lora', serif;
+  color: var(--forest);
+  font-size: 1.5rem;
+  margin-bottom: 0.3rem;
+}
+.add-modal p.subtitle {
+  color: var(--text-soft);
+  font-size: 0.82rem;
+  margin-bottom: 1.5rem;
+}
+.add-field {
+  margin-bottom: 1.2rem;
+}
+.add-field label {
+  display: block;
+  font-weight: 700;
+  font-size: 0.78rem;
+  color: var(--bark);
+  margin-bottom: 6px;
+  letter-spacing: 0.03em;
+}
+.add-field input {
+  width: 100%;
+  padding: 12px 16px;
+  border: 2px solid var(--sand);
+  border-radius: 14px;
+  font-family: 'Nunito', sans-serif;
+  font-size: 0.9rem;
+  color: var(--text);
+  background: white;
+  transition: border-color 0.2s;
+  outline: none;
+}
+.add-field input:focus { border-color: var(--forest); }
+.add-field input::placeholder { color: var(--text-soft); opacity: 0.6; }
+.add-submit-btn {
+  width: 100%;
+  padding: 14px;
+  background: var(--rust);
+  color: white;
+  border: none;
+  border-radius: 14px;
+  font-family: 'Nunito', sans-serif;
+  font-weight: 700;
+  font-size: 0.95rem;
+  cursor: pointer;
+  transition: background 0.2s, transform 0.1s;
+}
+.add-submit-btn:hover { background: var(--rust-light); }
+.add-submit-btn:active { transform: scale(0.98); }
+.add-submit-btn:disabled {
+  background: var(--sand);
+  color: var(--text-soft);
+  cursor: not-allowed;
+}
+
+.add-status {
+  text-align: center;
+  padding: 1.5rem 0;
+  display: none;
+}
+.add-status.show { display: block; }
+.add-status .spinner {
+  display: inline-block;
+  width: 32px;
+  height: 32px;
+  border: 3px solid var(--sand);
+  border-top-color: var(--rust);
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+  margin-bottom: 0.8rem;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+.add-status .status-text {
+  color: var(--text-soft);
+  font-size: 0.85rem;
+}
+.add-status .status-text.error { color: var(--rust); font-weight: 600; }
+.add-status .status-text.success { color: var(--forest); font-weight: 600; }
+
+.add-form.loading .add-field,
+.add-form.loading .add-submit-btn { display: none; }
+.add-form.loading .add-status { display: block; }
+
+.added-by-badge {
+  display: inline-block;
+  background: var(--mist);
+  color: var(--forest);
+  font-size: 0.68rem;
+  font-weight: 700;
+  padding: 3px 10px;
+  border-radius: 10px;
+  margin-left: 6px;
+  vertical-align: middle;
+}
+
+/* ═══════════════════════════ NAME PROMPT ═══════════════════════════ */
+.name-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(44,74,52,0.92);
+  backdrop-filter: blur(8px);
+  z-index: 99999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.name-overlay.hidden { display: none; }
+.name-box {
+  background: var(--card-bg);
+  border-radius: 24px;
+  padding: 3rem 2.5rem;
+  max-width: 400px;
+  width: 90%;
+  text-align: center;
+  box-shadow: 0 24px 80px rgba(0,0,0,0.3);
+}
+.name-box h2 {
+  font-family: 'Lora', serif;
+  color: var(--forest);
+  font-size: 1.6rem;
+  margin-bottom: 0.3rem;
+}
+.name-box p {
+  color: var(--text-soft);
+  font-size: 0.85rem;
+  margin-bottom: 1.5rem;
+}
+.name-box input {
+  width: 100%;
+  padding: 14px 18px;
+  border: 2px solid var(--sand);
+  border-radius: 14px;
+  font-family: 'Nunito', sans-serif;
+  font-size: 1rem;
+  color: var(--text);
+  text-align: center;
+  outline: none;
+  margin-bottom: 1rem;
+}
+.name-box input:focus { border-color: var(--forest); }
+.name-box button {
+  width: 100%;
+  padding: 14px;
+  background: var(--rust);
+  color: white;
+  border: none;
+  border-radius: 14px;
+  font-family: 'Nunito', sans-serif;
+  font-weight: 700;
+  font-size: 1rem;
+  cursor: pointer;
+}
+.name-box button:hover { background: var(--rust-light); }
+
+/* ═══════════════════════════ FOOTER ═══════════════════════════ */
+footer {
+  background: #1a2218;
+  color: rgba(255,255,255,0.25);
+  text-align: center;
+  padding: 2rem;
+  font-size: 0.72rem;
+  letter-spacing: 0.12em;
+}
+footer strong { color: var(--gold); }
+
+/* ═══════════════════════════ UTILITIES ═══════════════════════════ */
+@media (max-width: 640px) {
+  .listings-grid { grid-template-columns: 1fr; }
+  .nav-tabs { display: none; }
+  .compare-go-btn { font-size: 0.7rem; padding: 6px 14px; }
+}
+</style>
+</head>
+<body>
+
+<div class="grain"></div>
+
+<!-- ═══════════════════════════ HERO ═══════════════════════════ -->
+<section class="hero" id="top">
+  <div class="hero-slideshow" id="slideshow"></div>
+  <div class="hero-overlay"></div>
+
+  <div class="hero-content">
+    <p class="hero-badge">☀️ June 11–14, 2026 · Ontario</p>
+    <h1 class="hero-title">The Squad<br><em>Cottage</em><br>Trip.</h1>
+    <p class="hero-dates">3 nights · 8 listings · find the one</p>
+    <div class="hero-pills">
+      <span class="hero-pill">👥 ~10 people</span>
+      <span class="hero-pill">🏕️ Ontario Cottage Country</span>
+      <span class="hero-pill">🚗 From Toronto</span>
+    </div>
+    <a class="hero-cta" href="#listings">Pick Our Cottage ↓</a>
+  </div>
+
+  <div class="slide-indicators" id="slide-indicators"></div>
+</section>
+
+<!-- ═══════════════════════════ STICKY NAV ═══════════════════════════ -->
+<div class="sticky-nav">
+  <span class="nav-logo">Cottage '26</span>
+  <div class="nav-spacer"></div>
+
+  <div class="group-widget">
+    <span>Group:</span>
+    <strong>10 people</strong>
+  </div>
+
+  <div class="nav-tabs">
+    <button class="nav-tab active" onclick="setSort('default',this)">All</button>
+    <button class="nav-tab" onclick="setSort('votes',this)">🏆 Top Voted</button>
+    <button class="nav-tab" onclick="setSort('price',this)">💰 Cheapest</button>
+    <button class="nav-tab" onclick="setSort('kais',this)">⭐ Kai's Picks</button>
+  </div>
+
+  <button class="compare-toggle" id="compare-toggle-btn" onclick="toggleCompareMode()">⚖️ Compare</button>
+  <button class="add-listing-btn" onclick="openAddModal()">+ Add Listing</button>
+</div>
+
+<!-- ═══════════════════════════ LISTINGS ═══════════════════════════ -->
+<div class="section" id="listings">
+  <div class="section-eyebrow">🏕️ The Contenders</div>
+  <div class="section-title" id="listings-title">10 Listings. One Winner.</div>
+  <p class="section-sub" id="listings-sub">Vote, react, compare — find your vibe.</p>
+  <div class="listings-grid" id="listings-grid"></div>
+</div>
+
+<!-- ═══════════════════════════ LEADERBOARD ═══════════════════════════ -->
+<div class="leaderboard-wrap">
+  <div class="leaderboard-inner">
+    <h2 class="lb-title">🏆 Vote Leaderboard</h2>
+    <p class="lb-sub">Updates as the squad votes · keep scrolling</p>
+    <div class="lb-list" id="leaderboard"></div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════ MAP ═══════════════════════════ -->
+<div class="map-section-wrap">
+  <div class="map-container">
+    <div class="section-eyebrow">📍 Where They Are</div>
+    <div class="section-title">Ontario Cottage Corridor</div>
+    <p class="section-sub">All within ~2.5hrs of Toronto. Hover the pins for drive times.</p>
+
+    <div class="map-canvas-wrap" id="map-wrap">
+      <svg class="map-svg" viewBox="0 0 800 400" id="map-svg">
+        <!-- Water body background -->
+        <rect width="800" height="400" fill="#b8d4e8"/>
+        <!-- Ontario land mass (simplified) -->
+        <path d="M 0,180 Q 50,160 100,155 Q 150,145 200,150 Q 250,148 300,145 Q 350,140 400,138 Q 450,136 500,138 Q 550,140 600,145 Q 650,148 700,155 Q 750,160 800,165 L 800,400 L 0,400 Z" fill="#d4c9a8"/>
+        <!-- Georgian Bay -->
+        <path d="M 280,155 Q 320,130 360,120 Q 380,115 400,118 Q 420,120 440,130 Q 460,145 440,155 Q 420,165 400,162 Q 380,160 360,155 Q 320,148 280,155 Z" fill="#b8d4e8"/>
+        <!-- Lake Huron left -->
+        <path d="M 0,180 Q 30,165 60,155 Q 80,148 80,220 Q 80,280 60,320 Q 30,350 0,360 Z" fill="#b8d4e8"/>
+        <!-- Lake Simcoe -->
+        <ellipse cx="430" cy="185" rx="22" ry="14" fill="#b8d4e8" opacity="0.9"/>
+        <!-- Lake Scugog / Kawarthas water -->
+        <ellipse cx="560" cy="190" rx="18" ry="10" fill="#b8d4e8" opacity="0.8"/>
+        <!-- Toronto marker area -->
+        <circle cx="415" cy="235" r="5" fill="#c4622d" opacity="0.9"/>
+        <text x="425" y="238" font-size="9" fill="#6b4c36" font-family="Nunito,sans-serif" font-weight="700">TORONTO</text>
+        <!-- Distance rings -->
+        <circle cx="415" cy="235" r="60" fill="none" stroke="rgba(107,76,54,0.12)" stroke-width="1" stroke-dasharray="4,4"/>
+        <circle cx="415" cy="235" r="110" fill="none" stroke="rgba(107,76,54,0.1)" stroke-width="1" stroke-dasharray="4,4"/>
+        <!-- Tree decorations -->
+        <text x="200" y="330" font-size="12" fill="rgba(44,74,52,0.3)">🌲🌲🌲</text>
+        <text x="580" y="320" font-size="10" fill="rgba(44,74,52,0.3)">🌲🌲</text>
+        <text x="320" y="380" font-size="10" fill="rgba(44,74,52,0.3)">🌲</text>
+        <!-- Pins rendered via JS -->
+        <g id="map-pins"></g>
+      </svg>
+      <div class="map-tooltip" id="map-tooltip"></div>
+    </div>
+
+    <div class="drive-legend" id="drive-legend">
+      <div class="drive-item"><div class="drive-dot" style="background:var(--forest)"></div> Under 2hr from Toronto</div>
+      <div class="drive-item"><div class="drive-dot" style="background:var(--gold)"></div> 2–2.5hr from Toronto</div>
+      <div class="drive-item"><div class="drive-dot" style="background:var(--rust)"></div> 2.5–3hr from Toronto</div>
+    </div>
+  </div>
+</div>
+
+<footer>
+  Built for the <strong>Summer 2026</strong> Squad Trip · Ontario Cottage Country
+</footer>
+
+<!-- ═══════════════════════════ LIGHTBOX ═══════════════════════════ -->
+<div class="lightbox" id="lightbox">
+  <div class="lb-inner">
+    <button class="lb-close" onclick="closeLightbox()">✕</button>
+    <img class="lb-img" id="lb-img" src="" alt="">
+    <p class="lb-caption" id="lb-caption"></p>
+    <div class="lb-arrows">
+      <button class="lb-arrow" onclick="lbNav(-1)">←</button>
+      <button class="lb-arrow" onclick="lbNav(1)">→</button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════ COMPARE PANEL ═══════════════════════════ -->
+<div class="compare-panel" id="compare-panel">
+  <div class="compare-panel-top">
+    <div class="compare-panel-title">
+      ⚖️ Compare Mode
+      <span class="compare-selected-count" id="compare-count">0</span>
+      <span style="color:rgba(255,255,255,0.4);font-size:0.75rem;font-weight:400">Select 2–3 listings</span>
+    </div>
+    <div style="display:flex;gap:8px;align-items:center">
+      <button class="compare-go-btn" id="compare-go-btn" onclick="openCompare()" disabled>Compare Now</button>
+      <button onclick="toggleCompareMode()" style="background:none;border:none;color:rgba(255,255,255,0.4);cursor:pointer;font-size:1.1rem;">✕</button>
+    </div>
+  </div>
+  <div class="compare-chips" id="compare-chips"></div>
+</div>
+
+<!-- ═══════════════════════════ COMPARE MODAL ═══════════════════════════ -->
+<div class="compare-modal" id="compare-modal">
+  <div class="compare-modal-inner">
+    <div class="compare-modal-header">
+      <h2>Side-by-Side Comparison</h2>
+      <button class="modal-close-btn" onclick="closeCompare()">✕</button>
+    </div>
+    <div class="compare-table" id="compare-table"></div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════ NAME PROMPT ═══════════════════════════ -->
+<div class="name-overlay" id="name-overlay">
+  <div class="name-box">
+    <h2>Welcome to Cottage '26</h2>
+    <p>Who are you? This shows up next to your votes and comments.</p>
+    <input type="text" id="name-input" placeholder="Your name..." maxlength="20" onkeydown="if(event.key==='Enter')saveName()">
+    <button onclick="saveName()">Let's Go</button>
+  </div>
+</div>
+
+<!-- ═══════════════════════════ ADD LISTING MODAL ═══════════════════════════ -->
+<div class="add-modal-overlay" id="add-modal-overlay" onclick="if(event.target===this)closeAddModal()">
+  <div class="add-modal">
+    <button class="add-modal-close" onclick="closeAddModal()">✕</button>
+    <h2>Add a Listing</h2>
+    <p class="subtitle">Found a spot? Paste the Airbnb link and we'll pull in all the details.</p>
+    <div class="add-form" id="add-form">
+      <div class="add-field">
+        <label>Your Name</label>
+        <input type="text" id="add-name" placeholder="e.g. Kai, Marcus, Sarah..." maxlength="30">
+      </div>
+      <div class="add-field">
+        <label>Airbnb URL</label>
+        <input type="text" id="add-url" placeholder="https://www.airbnb.ca/rooms/..." maxlength="500">
+      </div>
+      <button class="add-submit-btn" id="add-submit-btn" onclick="submitAddListing()">Scrape & Add Listing</button>
+      <div class="add-status" id="add-status">
+        <div class="spinner"></div>
+        <div class="status-text" id="add-status-text">Scraping Airbnb... hang tight</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+// ═══════════════════════════ DATA ═══════════════════════════
+const LISTINGS = [
+  {
+    id: 1,
+    title: "Georgian Bay A-Frame",
+    area: "Georgian Bay",
+    location: "Tiny Township, ON",
+    beds: 3, baths: 1, guests: 7,
+    price: 430,
+    rating: 5, reviews: 6,
+    driveHr: "1h 50m",
+    driveColor: "#2c4a34",
+    kaisPick: false,
+    mapX: 300, mapY: 158,
+    vibes: ["🌊 Bay Views","🌲 Wooded","🏕️ Rustic"],
+    amenities: { "🛁 Hot Tub": true, "🏊 Lake": true, "🔥 Fire Pit": false, "🍖 BBQ": true, "🛶 Dock": false, "🧖 Sauna": false },
+    url: "https://www.airbnb.ca/rooms/1322779723776332921",
+    photos: [
+      "https://a0.muscache.com/im/pictures/miso/Hosting-1322779723776332921/original/d0ff5e32-077a-4f54-b4c4-90eb87aa2016.jpeg?im_w=720",
+      "https://a0.muscache.com/im/pictures/miso/Hosting-1322779723776332921/original/1d501238-5003-4528-8b28-1cd86adc52c1.jpeg?im_w=720",
+      "https://a0.muscache.com/im/pictures/miso/Hosting-1322779723776332921/original/86e3c5a3-c0f8-4621-8baf-de902c5b25e2.jpeg?im_w=720",
+      "https://a0.muscache.com/im/pictures/miso/Hosting-1322779723776332921/original/ccf6353f-2e16-4d69-aefd-6732d97f6575.jpeg?im_w=720",
+      "https://a0.muscache.com/im/pictures/miso/Hosting-1322779723776332921/original/9dce2dfe-499f-406e-a917-964394cd0cad.jpeg?im_w=720",
+      "https://a0.muscache.com/im/pictures/miso/Hosting-1322779723776332921/original/6bf5ba6e-c01a-40dc-8831-dd02e08f70c7.jpeg?im_w=720",
+      "https://a0.muscache.com/im/pictures/miso/Hosting-1322779723776332921/original/f8003087-a636-473c-8c76-f20082f5f2d3.jpeg?im_w=720",
+      "https://a0.muscache.com/im/pictures/miso/Hosting-1322779723776332921/original/9fac4fc7-77e5-4c8c-ba5e-d1ecb5069c77.jpeg?im_w=720",
+      "https://a0.muscache.com/im/pictures/miso/Hosting-1322779723776332921/original/8c79e68b-4a07-4d3c-9f03-7ff872bbad0e.jpeg?im_w=720"
+    ]
+  },
+  {
+    id: 2,
+    title: "Lakefront Escape",
+    area: "Wasaga Beach",
+    location: "Wasaga Beach, ON",
+    beds: 3, baths: 2, guests: 8,
+    price: 480,
+    rating: 4.96, reviews: 23,
+    driveHr: "1h 45m",
+    driveColor: "#2c4a34",
+    kaisPick: false,
+    mapX: 330, mapY: 172,
+    vibes: ["🛶 Lakefront","♨️ Hot Tub","🌲 Forest"],
+    amenities: { "🛁 Hot Tub": false, "🏊 Lake": false, "🔥 Fire Pit": true, "🍖 BBQ": true, "🛶 Dock": false, "🧖 Sauna": false },
+    url: "https://www.airbnb.ca/rooms/1356182272072783043",
+    photos: [
+      "https://a0.muscache.com/im/pictures/hosting/Hosting-1356182272072783043/original/188c14b7-e927-4a82-92d0-5dde506ff6af.jpeg?im_w=720",
+      "https://a0.muscache.com/im/pictures/hosting/Hosting-1356182272072783043/original/ae646361-94ea-45ad-b848-72335abbee80.jpeg?im_w=720",
+      "https://a0.muscache.com/im/pictures/hosting/Hosting-1356182272072783043/original/c4884c83-4a46-415d-b7f3-b5508d76b0d8.jpeg?im_w=720",
+      "https://a0.muscache.com/im/pictures/hosting/Hosting-1356182272072783043/original/6c896045-3846-4954-869c-8555ad8703dc.jpeg?im_w=720",
+      "https://a0.muscache.com/im/pictures/hosting/Hosting-1356182272072783043/original/8731d8bc-eaf6-4d7e-8ab1-c40399fb4ab0.jpeg?im_w=720",
+      "https://a0.muscache.com/im/pictures/hosting/Hosting-1356182272072783043/original/fe5069f4-a363-48e4-85fa-81ea0f1585a1.jpeg?im_w=720",
+      "https://a0.muscache.com/im/pictures/hosting/Hosting-1356182272072783043/original/75cf6dba-fea6-4d8e-8280-d67a87209ebe.jpeg?im_w=720",
+      "https://a0.muscache.com/im/pictures/hosting/Hosting-1356182272072783043/original/d9cc1149-176f-4e3a-811e-a6e603db705c.jpeg?im_w=720",
+      "https://a0.muscache.com/im/pictures/hosting/Hosting-1356182272072783043/original/a0eedba1-fe8b-49cf-9554-5232ff721a35.jpeg?im_w=720",
+      "https://a0.muscache.com/im/pictures/hosting/Hosting-1356182272072783043/original/00141a45-7519-4dd9-ab94-5706ba4142ba.jpeg?im_w=720"
+    ]
+  },
+  {
+    id: 3,
+    title: "The Muskoka Manor",
+    area: "Muskoka",
+    location: "Gravenhurst, ON",
+    beds: 3, baths: 2, guests: 7,
+    price: 895,
+    rating: 5, reviews: 11,
+    driveHr: "2h 10m",
+    driveColor: "#c9913d",
+    kaisPick: false,
+    mapX: 430, mapY: 155,
+    vibes: ["💎 Luxury","🌊 Waterfront","🛶 Dock","🔥 Fire Pit"],
+    amenities: { "🛁 Hot Tub": false, "🏊 Lake": false, "🔥 Fire Pit": true, "🍖 BBQ": true, "🛶 Dock": false, "🧖 Sauna": false },
+    url: "https://www.airbnb.ca/rooms/40613745",
+    photos: [
+      "https://a0.muscache.com/im/pictures/miso/Hosting-40613745/original/0b215c70-82ee-4894-93bc-0cd3567c4d20.jpeg?im_w=720",
+      "https://a0.muscache.com/im/pictures/miso/Hosting-40613745/original/1171adcd-02d5-449b-85be-0e0ca6a0f386.jpeg?im_w=720",
+      "https://a0.muscache.com/im/pictures/hosting/Hosting-U3RheVN1cHBseUxpc3Rpbmc6NDA2MTM3NDU%3D/original/a354bc41-9fd6-48e2-a70a-5c536212d266.jpeg?im_w=720",
+      "https://a0.muscache.com/im/pictures/miso/Hosting-40613745/original/9a51ac97-b962-4889-b93b-7d58dac058a0.jpeg?im_w=720",
+      "https://a0.muscache.com/im/pictures/miso/Hosting-40613745/original/de9d8895-2cd9-46f8-a70d-7e02257325b3.jpeg?im_w=720",
+      "https://a0.muscache.com/im/pictures/miso/Hosting-40613745/original/87bc46f1-dc55-4309-a75a-7a8d1f976bc1.jpeg?im_w=720",
+      "https://a0.muscache.com/im/pictures/miso/Hosting-40613745/original/3bfb7520-b133-4938-b579-9531a2110cbf.jpeg?im_w=720",
+      "https://a0.muscache.com/im/pictures/miso/Hosting-40613745/original/260824dc-62bd-4831-810c-ed32ceb2fa5f.jpeg?im_w=720",
+      "https://a0.muscache.com/im/pictures/miso/Hosting-40613745/original/af61e721-a165-43b3-9ac5-1335119b6706.jpeg?im_w=720",
+      "https://a0.muscache.com/im/pictures/miso/Hosting-40613745/original/d5b2ba7f-0d3d-4d77-8012-9767aa39f30e.jpeg?im_w=720"
+    ]
+  },
+  {
+    id: 4,
+    title: "Blue Mountains Retreat",
+    area: "Collingwood",
+    location: "Collingwood, ON",
+    beds: 4, baths: 3, guests: 10,
+    price: 540,
+    rating: 4.9, reviews: 0,
+    driveHr: "2h 0m",
+    driveColor: "#c9913d",
+    kaisPick: false,
+    mapX: 280, mapY: 175,
+    vibes: ["🌲 Forest","🏔️ Scenic","🏠 Spacious"],
+    amenities: { "🛁 Hot Tub": false, "🏊 Lake": true, "🔥 Fire Pit": true, "🍖 BBQ": true, "🛶 Dock": false, "🧖 Sauna": false },
+    url: "https://www.airbnb.ca/rooms/1573396745294436058",
+    photos: [
+      "https://a0.muscache.com/im/pictures/hosting/Hosting-1573396745294436058/original/26d0981f-7600-43e8-9b61-0954b5933b36.jpeg?im_w=720",
+      "https://a0.muscache.com/im/pictures/hosting/Hosting-1573396745294436058/original/a4f5659b-b677-45c2-a237-99b2c86decbc.jpeg?im_w=720",
+      "https://a0.muscache.com/im/pictures/hosting/Hosting-1573396745294436058/original/955adf24-e166-4cad-8a81-b8975f9f5ef0.jpeg?im_w=720",
+      "https://a0.muscache.com/im/pictures/hosting/Hosting-1573396745294436058/original/5e5eb8c4-2e3a-4d5f-89a2-b2b4fd37d4b1.jpeg?im_w=720",
+      "https://a0.muscache.com/im/pictures/hosting/Hosting-1573396745294436058/original/8b1514c0-23d1-4391-b6bf-51d5dbd63c66.jpeg?im_w=720",
+      "https://a0.muscache.com/im/pictures/hosting/Hosting-1573396745294436058/original/b1912698-d824-4c4d-8442-6814f04d185b.jpeg?im_w=720",
+      "https://a0.muscache.com/im/pictures/hosting/Hosting-1573396745294436058/original/0d4339a1-30c1-4092-8b1f-26af90d190f4.jpeg?im_w=720",
+      "https://a0.muscache.com/im/pictures/hosting/Hosting-1573396745294436058/original/465ce0d9-38f4-4bd3-be55-6c37f06a95bd.jpeg?im_w=720",
+      "https://a0.muscache.com/im/pictures/hosting/Hosting-1573396745294436058/original/11c6956a-4385-4ab4-895e-3ae62e673683.png?im_w=720",
+      "https://a0.muscache.com/im/pictures/hosting/Hosting-1573396745294436058/original/5269ef66-0f8a-4e03-9734-8ee29b4a6444.jpeg?im_w=720"
+    ]
+  },
+  {
+    id: 5,
+    title: "Sauble Beach Stunner",
+    area: "Bruce Peninsula",
+    location: "Sauble Beach, ON",
+    beds: 5, baths: 4, guests: 12,
+    price: 510,
+    rating: 5, reviews: 23,
+    driveHr: "2h 35m",
+    driveColor: "#b5491e",
+    kaisPick: true,
+    mapX: 195, mapY: 170,
+    vibes: ["🏖️ Beach Steps","🌅 Sunsets","🎉 Vibe"],
+    amenities: { "🛁 Hot Tub": true, "🏊 Lake": true, "🔥 Fire Pit": true, "🍖 BBQ": true, "🛶 Dock": false, "🧖 Sauna": false },
+    url: "https://www.airbnb.ca/rooms/1385001401644874562",
+    photos: [
+      "https://a0.muscache.com/im/pictures/hosting/Hosting-1385001401644874562/original/a3db17cb-2349-409d-85a8-0018d51bea8c.jpeg?im_w=720",
+      "https://a0.muscache.com/im/pictures/hosting/Hosting-1385001401644874562/original/0ac4f5cb-5b72-4bc2-80f4-1241204e07e3.jpeg?im_w=720",
+      "https://a0.muscache.com/im/pictures/hosting/Hosting-1385001401644874562/original/54fca39b-6e00-40cc-bd25-163f76ef472c.jpeg?im_w=720",
+      "https://a0.muscache.com/im/pictures/hosting/Hosting-1385001401644874562/original/6a312a6e-f864-443e-b116-fd99f45d684f.jpeg?im_w=720",
+      "https://a0.muscache.com/im/pictures/hosting/Hosting-1385001401644874562/original/a0019a25-834e-4104-8ab7-66ae1ba74e86.jpeg?im_w=720",
+      "https://a0.muscache.com/im/pictures/hosting/Hosting-1385001401644874562/original/c1e6c062-6ffe-4226-a19d-1494a73432dd.jpeg?im_w=720",
+      "https://a0.muscache.com/im/pictures/hosting/Hosting-1385001401644874562/original/a99b4463-1ae5-4b38-aa79-d77de5ad813e.jpeg?im_w=720",
+      "https://a0.muscache.com/im/pictures/hosting/Hosting-1385001401644874562/original/6bff5b14-4479-42a9-9201-8942bf61ea4d.jpeg?im_w=720",
+      "https://a0.muscache.com/im/pictures/hosting/Hosting-1385001401644874562/original/33f939e2-8fc9-418f-a51f-ece98a2bf06f.jpeg?im_w=720",
+      "https://a0.muscache.com/im/pictures/hosting/Hosting-1385001401644874562/original/11d8353e-5dab-48d3-9537-a09ecaef4328.jpeg?im_w=720"
+    ]
+  },
+  {
+    id: 6,
+    title: "Grand Bend Beachfront",
+    area: "Grand Bend",
+    location: "Grand Bend, ON",
+    beds: 7, baths: 5.5, guests: 16,
+    price: 620,
+    rating: 4.84, reviews: 70,
+    driveHr: "2h 25m",
+    driveColor: "#b5491e",
+    kaisPick: false,
+    mapX: 130, mapY: 210,
+    vibes: ["🏖️ Beachfront","🌊 Lake Huron","🎉 Party-Ready"],
+    amenities: { "🛁 Hot Tub": true, "🏊 Lake": true, "🔥 Fire Pit": true, "🍖 BBQ": true, "🛶 Dock": false, "🧖 Sauna": true },
+    url: "https://www.airbnb.ca/rooms/581182022418368306",
+    photos: [
+      "https://a0.muscache.com/im/pictures/hosting/Hosting-581182022418368306/original/24c45861-21bf-4ab3-993f-eda875577b5d.jpeg?im_w=720",
+      "https://a0.muscache.com/im/pictures/hosting/Hosting-581182022418368306/original/5fff9033-ff49-4a42-abd1-a7ab24eb389d.jpeg?im_w=720",
+      "https://a0.muscache.com/im/pictures/hosting/Hosting-581182022418368306/original/38f697dd-fc86-45f3-bef0-5c0fd2a7c8b0.jpeg?im_w=720",
+      "https://a0.muscache.com/im/pictures/hosting/Hosting-581182022418368306/original/a4792192-11f4-4207-8222-0f64259660c7.jpeg?im_w=720",
+      "https://a0.muscache.com/im/pictures/hosting/Hosting-581182022418368306/original/5a95baad-acc6-4169-881b-27112ed7b02d.jpeg?im_w=720",
+      "https://a0.muscache.com/im/pictures/hosting/Hosting-581182022418368306/original/2f83fa8f-c9cd-4594-ab5d-7b3423c0d8ec.jpeg?im_w=720",
+      "https://a0.muscache.com/im/pictures/hosting/Hosting-581182022418368306/original/cc5d6431-98d3-4ede-bd06-c0e0d429954c.jpeg?im_w=720",
+      "https://a0.muscache.com/im/pictures/hosting/Hosting-581182022418368306/original/a48c4ec2-2db0-4a92-a065-e59fec0dbc81.jpeg?im_w=720",
+      "https://a0.muscache.com/im/pictures/hosting/Hosting-581182022418368306/original/2ad77604-fb0e-4d18-ad37-8f253e67c698.jpeg?im_w=720",
+      "https://a0.muscache.com/im/pictures/hosting/Hosting-581182022418368306/original/6f6f7042-66bf-46ea-8159-6adab3475d3d.jpeg?im_w=720"
+    ]
+  },
+  {
+    id: 7,
+    title: "The One — Grand Bend Estate",
+    area: "Grand Bend",
+    location: "Grand Bend, ON",
+    beds: 3, baths: 2, guests: 11,
+    price: 750,
+    rating: 4.73, reviews: 33,
+    driveHr: "2h 25m",
+    driveColor: "#b5491e",
+    kaisPick: true,
+    mapX: 118, mapY: 220,
+    vibes: ["👑 Kai's #1","🏖️ Beachfront","♨️ Hot Tub","🔥 Fire Pit"],
+    amenities: { "🛁 Hot Tub": false, "🏊 Lake": true, "🔥 Fire Pit": true, "🍖 BBQ": true, "🛶 Dock": false, "🧖 Sauna": false },
+    url: "https://www.airbnb.ca/rooms/1321080002066299067",
+    photos: [
+      "https://a0.muscache.com/im/pictures/hosting/Hosting-U3RheVN1cHBseUxpc3Rpbmc6MTMyMTA4MDAwMjA2NjI5OTA2Nw==/original/c33a8a26-fa9d-41b0-aa1e-04f2e07dabb4.png?im_w=720",
+      "https://a0.muscache.com/im/pictures/hosting/Hosting-U3RheVN1cHBseUxpc3Rpbmc6MTMyMTA4MDAwMjA2NjI5OTA2Nw==/original/d9c5b8f4-3405-4ccd-9c4b-1c139e8e2b2b.png?im_w=720",
+      "https://a0.muscache.com/im/pictures/hosting/Hosting-U3RheVN1cHBseUxpc3Rpbmc6MTMyMTA4MDAwMjA2NjI5OTA2Nw==/original/25866e4d-3003-4435-996a-5454ed091cf0.png?im_w=720",
+      "https://a0.muscache.com/im/pictures/hosting/Hosting-U3RheVN1cHBseUxpc3Rpbmc6MTMyMTA4MDAwMjA2NjI5OTA2Nw==/original/db5efe30-b45a-4b83-be0c-5a1d6918e09d.png?im_w=720",
+      "https://a0.muscache.com/im/pictures/hosting/Hosting-U3RheVN1cHBseUxpc3Rpbmc6MTMyMTA4MDAwMjA2NjI5OTA2Nw==/original/92c98195-4617-4d7f-b352-d33ff38e40ab.png?im_w=720",
+      "https://a0.muscache.com/im/pictures/hosting/Hosting-U3RheVN1cHBseUxpc3Rpbmc6MTMyMTA4MDAwMjA2NjI5OTA2Nw==/original/681ccfdd-7b6b-4cde-a27a-ddddd11163f6.png?im_w=720",
+      "https://a0.muscache.com/im/pictures/hosting/Hosting-U3RheVN1cHBseUxpc3Rpbmc6MTMyMTA4MDAwMjA2NjI5OTA2Nw==/original/055e66e3-609a-4b31-9ac6-02ae19418fa5.png?im_w=720",
+      "https://a0.muscache.com/im/pictures/hosting/Hosting-U3RheVN1cHBseUxpc3Rpbmc6MTMyMTA4MDAwMjA2NjI5OTA2Nw==/original/297126b8-16a1-44cd-9302-49589897bbad.png?im_w=720",
+      "https://a0.muscache.com/im/pictures/hosting/Hosting-1321080002066299067/original/150429b0-cd55-493e-951e-649338445f7e.png?im_w=720",
+      "https://a0.muscache.com/im/pictures/hosting/Hosting-1321080002066299067/original/c9169507-0d2b-4b66-bee7-a2ef24042a81.png?im_w=720"
+    ]
+  },
+  {
+    id: 8,
+    title: "Kawartha Lakes Hideaway",
+    area: "Kawarthas",
+    location: "Fenelon Falls, ON",
+    beds: 4, baths: 3, guests: 10,
+    price: 465,
+    rating: 4.9, reviews: 1,
+    driveHr: "1h 55m",
+    driveColor: "#2c4a34",
+    kaisPick: false,
+    mapX: 555, mapY: 192,
+    vibes: ["🛶 Canoe & Kayak","🌲 Private","🎣 Fishing"],
+    amenities: { "🛁 Hot Tub": true, "🏊 Lake": true, "🔥 Fire Pit": true, "🍖 BBQ": true, "🛶 Dock": false, "🧖 Sauna": false },
+    url: "https://www.airbnb.ca/rooms/1504300619694699840",
+    photos: [
+      "https://a0.muscache.com/im/pictures/hosting/Hosting-1504300619694699840/original/242c0a35-6fee-4eaa-960e-e6f721e49b67.jpeg?im_w=720",
+      "https://a0.muscache.com/im/pictures/hosting/Hosting-1504300619694699840/original/078af0da-8737-4c5d-9816-0cd07e369f9f.jpeg?im_w=720",
+      "https://a0.muscache.com/im/pictures/hosting/Hosting-1504300619694699840/original/f84445ef-a436-476c-a530-bb98b4bbdfea.jpeg?im_w=720",
+      "https://a0.muscache.com/im/pictures/hosting/Hosting-1504300619694699840/original/a646b105-9cd0-4259-9a95-1af366efaf72.jpeg?im_w=720",
+      "https://a0.muscache.com/im/pictures/hosting/Hosting-1504300619694699840/original/52ad5877-e371-4ff2-8f0d-2e988815e079.jpeg?im_w=720",
+      "https://a0.muscache.com/im/pictures/hosting/Hosting-1504300619694699840/original/318abb93-58a3-406c-ac36-199134ec2f6e.jpeg?im_w=720",
+      "https://a0.muscache.com/im/pictures/hosting/Hosting-1504300619694699840/original/8997e2bc-b009-44c6-a8dd-a4f53b9235a3.jpeg?im_w=720",
+      "https://a0.muscache.com/im/pictures/hosting/Hosting-1504300619694699840/original/11e50dcb-dc1c-4ca1-96b5-6e4a062fb6f8.jpeg?im_w=720",
+      "https://a0.muscache.com/im/pictures/hosting/Hosting-1504300619694699840/original/21635358-d29a-4e76-b913-c09329697399.jpeg?im_w=720",
+      "https://a0.muscache.com/im/pictures/hosting/Hosting-1504300619694699840/original/901f0e12-4462-4241-8397-411b680735c4.jpeg?im_w=720"
+    ]
+  },
+  {
+    id: 9,
+    title: "3 Kusins Court",
+    area: "Grand Bend",
+    location: "Grand Bend, ON",
+    beds: 5, baths: 3, guests: 10,
+    price: 550,
+    rating: 4.95, reviews: 42,
+    driveHr: "2h 20m",
+    driveColor: "#b5491e",
+    kaisPick: false,
+    mapX: 140, mapY: 200,
+    vibes: ["👨‍👩‍👦 Family Vibes","🏖️ Beachfront","🔥 Fire Pit"],
+    amenities: { "🛁 Hot Tub": true, "🏊 Lake": true, "🔥 Fire Pit": true, "🍖 BBQ": true, "🛶 Dock": false, "🧖 Sauna": false },
+    url: "#",
+    photos: [
+      "photos/3-kusins-court/photo_1.png",
+      "photos/3-kusins-court/photo_2.png",
+      "photos/3-kusins-court/photo_3.png",
+      "photos/3-kusins-court/photo_4.png"
+    ]
+  },
+  {
+    id: 10,
+    title: "37 Hillsdale",
+    area: "Grand Bend",
+    location: "Grand Bend, ON",
+    beds: 4, baths: 2, guests: 10,
+    price: 500,
+    rating: 4.9, reviews: 15,
+    driveHr: "2h 20m",
+    driveColor: "#b5491e",
+    kaisPick: false,
+    mapX: 125, mapY: 215,
+    vibes: ["🏠 Cozy","🏖️ Beach Close","🌲 Quiet Street"],
+    amenities: { "🛁 Hot Tub": false, "🏊 Lake": true, "🔥 Fire Pit": true, "🍖 BBQ": true, "🛶 Dock": false, "🧖 Sauna": false },
+    url: "#",
+    photos: [
+      "photos/37-hillsdale/photo_1.jpg",
+      "photos/37-hillsdale/photo_2.jpg",
+      "photos/37-hillsdale/photo_3.jpg"
+    ]
+  }
+];
+
+// ═══════════════════════════ FIREBASE CONFIG ═══════════════════════════
+// ⚠️ PASTE YOUR FIREBASE CONFIG HERE — see setup instructions below
+const firebaseConfig = {
+  apiKey: "AIzaSyAGQawZuwF5XPfNyG_1Oeof2ZD49lx8hU4",
+  authDomain: "cotty-trip.firebaseapp.com",
+  databaseURL: "https://cotty-trip-default-rtdb.firebaseio.com",
+  projectId: "cotty-trip",
+  storageBucket: "cotty-trip.firebasestorage.app",
+  messagingSenderId: "921834216516",
+  appId: "1:921834216516:web:44d43ec3bdad18ca7df011"
+};
+
+let db = null;
+let FB_READY = false;
+if (firebaseConfig.apiKey) {
+  firebase.initializeApp(firebaseConfig);
+  db = firebase.database();
+  FB_READY = true;
+}
+
+// ═══════════════════════════ VISITOR IDENTITY ═══════════════════════════
+let visitorId = localStorage.getItem('cottage_visitor_id');
+if (!visitorId) {
+  visitorId = 'v_' + Math.random().toString(36).slice(2, 10);
+  localStorage.setItem('cottage_visitor_id', visitorId);
+}
+let visitorName = localStorage.getItem('cottage_visitor_name') || '';
+
+function saveName() {
+  const inp = document.getElementById('name-input');
+  const name = inp.value.trim();
+  if (!name) { inp.focus(); return; }
+  visitorName = name;
+  localStorage.setItem('cottage_visitor_name', name);
+  document.getElementById('name-overlay').classList.add('hidden');
+}
+// Show name prompt if no name saved
+if (visitorName) {
+  document.getElementById('name-overlay').classList.add('hidden');
+} else {
+  setTimeout(() => document.getElementById('name-input').focus(), 300);
+}
+
+// ═══════════════════════════ STATE ═══════════════════════════
+const groupSize = 10;
+let sortMode = 'default';
+let compareMode = false;
+let compareSelected = [];
+let upvotes = {};
+let downvotes = {};
+let myVote = {};
+let saved = {};
+let reactions = {};
+let comments = {};
+let photoIdx = {};
+let lbCard = null, lbPhotoIdx = 0;
+
+const EMOJIS = ['🔥','😍','👀','🤔','💸','❤️'];
+
+function initListingState(l) {
+  if (upvotes[l.id] === undefined) upvotes[l.id] = 0;
+  if (downvotes[l.id] === undefined) downvotes[l.id] = 0;
+  if (myVote[l.id] === undefined) myVote[l.id] = null;
+  if (saved[l.id] === undefined) saved[l.id] = false;
+  photoIdx[l.id] = photoIdx[l.id] || 0;
+  if (!comments[l.id]) comments[l.id] = [];
+  if (!reactions[l.id]) {
+    reactions[l.id] = { myReacts: new Set() };
+    EMOJIS.forEach(e => { reactions[l.id][e] = 0; });
+  }
+}
+LISTINGS.forEach(initListingState);
+
+// ═══════════════════════════ FIREBASE SYNC ═══════════════════════════
+function fbWrite(path, val) {
+  if (FB_READY) db.ref(path).set(val);
+}
+function fbPush(path, val) {
+  if (FB_READY) db.ref(path).push(val);
+}
+
+function setupFirebaseListeners() {
+  if (!FB_READY) return;
+
+  // Votes listener
+  db.ref('votes').on('value', snap => {
+    const data = snap.val() || {};
+    // Reset counts
+    LISTINGS.forEach(l => { upvotes[l.id] = 0; downvotes[l.id] = 0; });
+    // Count all votes from all users
+    Object.entries(data).forEach(([listingId, voters]) => {
+      const lid = parseInt(listingId);
+      if (!upvotes.hasOwnProperty(lid)) return;
+      Object.entries(voters || {}).forEach(([vid, dir]) => {
+        if (dir === 'up') upvotes[lid]++;
+        else if (dir === 'down') downvotes[lid]++;
+        if (vid === visitorId) myVote[lid] = dir;
+      });
+    });
+    render();
+  });
+
+  // Reactions listener
+  db.ref('reactions').on('value', snap => {
+    const data = snap.val() || {};
+    LISTINGS.forEach(l => {
+      const myReacts = reactions[l.id] ? reactions[l.id].myReacts : new Set();
+      reactions[l.id] = { myReacts };
+      EMOJIS.forEach(e => { reactions[l.id][e] = 0; });
+    });
+    Object.entries(data).forEach(([listingId, emojis]) => {
+      const lid = parseInt(listingId);
+      if (!reactions[lid]) return;
+      Object.entries(emojis || {}).forEach(([emoji, users]) => {
+        if (emoji === '_') return;
+        let count = 0;
+        Object.entries(users || {}).forEach(([vid, val]) => {
+          if (val) { count++; if (vid === visitorId) reactions[lid].myReacts.add(emoji); }
+        });
+        reactions[lid][emoji] = count;
+      });
+    });
+    render();
+  });
+
+  // Comments listener
+  db.ref('comments').on('value', snap => {
+    const data = snap.val() || {};
+    Object.entries(data).forEach(([listingId, msgs]) => {
+      const lid = parseInt(listingId);
+      if (!comments.hasOwnProperty(lid)) { comments[lid] = []; }
+      comments[lid] = Object.values(msgs || {}).map(m => `${m.name}: ${m.text}`);
+    });
+    render();
+  });
+
+  // User-added listings listener
+  db.ref('addedListings').on('value', snap => {
+    const data = snap.val() || {};
+    Object.values(data).forEach(l => {
+      if (!LISTINGS.find(x => x.id === l.id)) {
+        LISTINGS.push(l);
+        initListingState(l);
+      }
+    });
+    render();
+  });
+}
+
+// ═══════════════════════════ HERO SLIDESHOW ═══════════════════════════
+const HERO_SLIDES = LISTINGS.flatMap(l => l.photos.slice(0,1));
+let slideIdx = 0;
+function buildHero() {
+  const wrap = document.getElementById('slideshow');
+  const indic = document.getElementById('slide-indicators');
+  HERO_SLIDES.forEach((src, i) => {
+    const div = document.createElement('div');
+    div.className = 'slide' + (i===0?' active':'');
+    div.style.backgroundImage = `url(${src})`;
+    wrap.appendChild(div);
+    const dot = document.createElement('button');
+    dot.className = 'slide-dot' + (i===0?' active':'');
+    dot.onclick = () => goSlide(i);
+    indic.appendChild(dot);
+  });
+}
+function goSlide(idx) {
+  document.querySelectorAll('.slide').forEach((s,i) => s.classList.toggle('active', i===idx));
+  document.querySelectorAll('.slide-dot').forEach((d,i) => d.classList.toggle('active', i===idx));
+  slideIdx = idx;
+}
+buildHero();
+setInterval(() => goSlide((slideIdx+1) % HERO_SLIDES.length), 4500);
+
+// ═══════════════════════════ MAP ═══════════════════════════
+function buildMap() {
+  const svg = document.getElementById('map-pins');
+  const tooltip = document.getElementById('map-tooltip');
+  const wrap = document.getElementById('map-wrap');
+
+  LISTINGS.forEach(l => {
+    const g = document.createElementNS('http://www.w3.org/2000/svg','g');
+    g.setAttribute('class','map-pin');
+    g.setAttribute('transform',`translate(${l.mapX},${l.mapY})`);
+
+    const shadow = document.createElementNS('http://www.w3.org/2000/svg','ellipse');
+    shadow.setAttribute('cx','0'); shadow.setAttribute('cy','2');
+    shadow.setAttribute('rx','6'); shadow.setAttribute('ry','3');
+    shadow.setAttribute('fill','rgba(0,0,0,0.18)');
+    g.appendChild(shadow);
+
+    const circle = document.createElementNS('http://www.w3.org/2000/svg','circle');
+    circle.setAttribute('cx','0'); circle.setAttribute('cy','-14');
+    circle.setAttribute('r','10');
+    circle.setAttribute('fill', l.kaisPick ? '#b5491e' : l.driveColor);
+    circle.setAttribute('class','pin-circle');
+    circle.setAttribute('stroke','white'); circle.setAttribute('stroke-width','2');
+    g.appendChild(circle);
+
+    const emoji = document.createElementNS('http://www.w3.org/2000/svg','text');
+    emoji.setAttribute('x','0'); emoji.setAttribute('y','-10');
+    emoji.setAttribute('text-anchor','middle'); emoji.setAttribute('font-size','9');
+    emoji.textContent = l.kaisPick ? '⭐' : '🏠';
+    g.appendChild(emoji);
+
+    const stem = document.createElementNS('http://www.w3.org/2000/svg','line');
+    stem.setAttribute('x1','0'); stem.setAttribute('y1','-4');
+    stem.setAttribute('x2','0'); stem.setAttribute('y2','2');
+    stem.setAttribute('stroke', l.kaisPick ? '#b5491e' : l.driveColor);
+    stem.setAttribute('stroke-width','2');
+    g.appendChild(stem);
+
+    g.addEventListener('mouseenter', (e) => {
+      const rect = wrap.getBoundingClientRect();
+      const svgEl = document.getElementById('map-svg');
+      const svgRect = svgEl.getBoundingClientRect();
+      const scaleX = svgRect.width / 800;
+      const scaleY = svgRect.height / 400;
+      const px = l.mapX * scaleX - wrap.scrollLeft;
+      const py = l.mapY * scaleY - 60;
+      tooltip.style.left = Math.min(px, wrap.clientWidth - 210) + 'px';
+      tooltip.style.top = Math.max(4, py) + 'px';
+      tooltip.innerHTML = `
+        <div class="map-tooltip-title">${l.kaisPick?'⭐ ':''}${l.title}</div>
+        <div class="map-tooltip-area">${l.area} · ${l.location}</div>
+        <div class="map-tooltip-drive">🚗 ${l.driveHr} from Toronto</div>
+      `;
+      tooltip.classList.add('show');
+    });
+    g.addEventListener('mouseleave', () => tooltip.classList.remove('show'));
+    svg.appendChild(g);
+  });
+}
+buildMap();
+
+// ═══════════════════════════ HELPERS ═══════════════════════════
+function netVotes(l) {
+  return upvotes[l.id] - downvotes[l.id];
+}
+function getUp(l) { return upvotes[l.id] || 0; }
+function getDown(l) { return downvotes[l.id] || 0; }
+function ppp(l) { return Math.ceil(l.price / groupSize); }
+function sortedListings() {
+  let list = [...LISTINGS];
+  if (sortMode==='votes') list.sort((a,b) => netVotes(b)-netVotes(a));
+  else if (sortMode==='price') list.sort((a,b) => a.price-b.price);
+  else if (sortMode==='kais') list.sort((a,b) => (b.kaisPick?1:0)-(a.kaisPick?1:0));
+  return list;
+}
+
+// ═══════════════════════════ RENDER CARDS ═══════════════════════════
+function renderCard(l, delay, rank) {
+  const nv = netVotes(l);
+  const idx = photoIdx[l.id] || 0;
+  const isCmpSel = compareSelected.includes(l.id);
+  const rankClass = rank === 1 ? 'rank-1' : rank === 2 ? 'rank-2' : rank === 3 ? 'rank-3' : 'rank-rest';
+  const rankBadge = rank ? `<div class="rank-badge ${rankClass}">#${rank}</div>` : '';
+
+  const imgs = l.photos.map((s,i)=>`
+    <img class="gallery-img${i===idx?' active':''}" src="${s}" alt="photo ${i+1}" loading="lazy"
+         onclick="openLightbox(${l.id},${i})">
+  `).join('');
+
+  const dots = l.photos.map((_,i)=>`
+    <button class="g-dot${i===idx?' active':''}" onclick="setPhoto(${l.id},${i},event)"></button>
+  `).join('');
+
+  const amenHtml = Object.entries(l.amenities).map(([name, has])=>`
+    <span class="amenity${has?' has':''}"><span class="amenity-icon">${has?'✅':'⬜'}</span> ${name}</span>
+  `).join('');
+
+  const reacts = EMOJIS.map(e => {
+    const cnt = reactions[l.id][e] || 0;
+    const mine = reactions[l.id].myReacts.has(e);
+    if (cnt===0 && !mine) return '';
+    return `<button class="react-btn${mine?' reacted':''}" onclick="toggleReact(${l.id},'${e}',event)" title="${e}">
+      ${e} <span class="react-count">${cnt>0?cnt:''}</span>
+    </button>`;
+  }).filter(Boolean).join('');
+
+  const addable = EMOJIS.filter(e => !reactions[l.id].myReacts.has(e));
+  const commentHtml = comments[l.id].map(c=>`<div class="comment-item">💬 ${c}</div>`).join('');
+
+  return `<div class="card${isCmpSel&&compareMode?' compare-selected':''}" id="card-${l.id}" style="animation:fadeIn 0.5s ${delay}s both">
+    <div class="card-gallery" id="gal-${l.id}">
+      ${imgs}
+      ${rankBadge}
+      <div class="card-badges">
+        ${l.kaisPick?'<span class="badge badge-kais">⭐ Kai\'s Pick</span>':''}
+        ${nv>=4?'<span class="badge badge-fave">🏆 Squad Fave</span>':''}
+        ${isCmpSel&&compareMode?'<span class="badge badge-compare">⚖️ Comparing</span>':''}
+      </div>
+      <button class="save-btn" onclick="toggleSaved(${l.id},event)">${saved[l.id]?'❤️':'🤍'}</button>
+      <button class="gallery-arrow-btn left" onclick="setPhoto(${l.id},${(idx-1+l.photos.length)%l.photos.length},event)">←</button>
+      <button class="gallery-arrow-btn right" onclick="setPhoto(${l.id},${(idx+1)%l.photos.length},event)">→</button>
+      <div class="gallery-dots">${dots}</div>
+      ${compareMode?`<button class="compare-check${isCmpSel?' checked':''}" onclick="toggleCompareSelect(${l.id},event)">${isCmpSel?'✓':''}</button>`:''}
+    </div>
+    <div class="card-body">
+      <div class="card-area">${l.area}</div>
+      <div class="card-title">${l.title}${l.addedBy ? `<span class="added-by-badge">Added by ${l.addedBy}</span>` : ''}</div>
+      <div class="vibe-tags">${l.vibes.map(v=>`<span class="vibe-tag">${v}</span>`).join('')}</div>
+      <div class="amenity-checks">${amenHtml}</div>
+      <div class="card-stats">
+        <span class="card-stat">🛏 ${l.beds} beds</span>
+        <span class="card-stat">🚿 ${l.baths} baths</span>
+        <span class="card-stat">👥 Up to ${l.guests}</span>
+        <span class="card-stat">⭐ ${l.rating} (${l.reviews})</span>
+      </div>
+      <div class="card-footer">
+        <div class="price-block">
+          <div class="price-main">$${l.price}<span>/night</span></div>
+          <div class="price-total">$${l.price*3} total · 3 nights</div>
+          <div class="price-person" id="ppp-${l.id}">≈ $${ppp(l)}/person/night</div>
+          <div class="drive-badge">🚗 ${l.driveHr} from Toronto</div>
+        </div>
+        <div class="vote-row">
+          <div class="vote-btns">
+            <button class="vote-btn vote-up${myVote[l.id]==='up'?' active':''}" onclick="doVote(${l.id},'up')">
+              👍 <span>${getUp(l)}</span>
+            </button>
+            <button class="vote-btn vote-down${myVote[l.id]==='down'?' active':''}" onclick="doVote(${l.id},'down')">
+              👎 <span>${getDown(l)}</span>
+            </button>
+          </div>
+          <a class="airbnb-link" href="${l.url}" target="_blank">View Airbnb →</a>
+        </div>
+      </div>
+    </div>
+    <div class="reactions-strip">
+      <div class="reactions-row" id="reacts-${l.id}">
+        ${reacts}
+        <button class="react-add" onclick="addReact(${l.id},event)" title="Add reaction">+ React</button>
+      </div>
+      <div class="comment-area">
+        <input class="comment-input" id="cinput-${l.id}" placeholder="Add a note for the squad..." maxlength="80" onkeydown="if(event.key==='Enter')submitComment(${l.id})">
+        <button class="comment-submit" onclick="submitComment(${l.id})">Send</button>
+      </div>
+      <div class="comments-list" id="clist-${l.id}">${commentHtml}</div>
+    </div>
+  </div>`;
+}
+
+function render() {
+  const grid = document.getElementById('listings-grid');
+  const sorted = sortedListings();
+  const showRank = sortMode !== 'default';
+  grid.innerHTML = sorted.map((l,i) => renderCard(l, i*0.06, showRank ? i+1 : null)).join('');
+
+  // Update section header based on sort mode
+  const titleEl = document.getElementById('listings-title');
+  const subEl = document.getElementById('listings-sub');
+  if (sortMode === 'votes') {
+    titleEl.textContent = '🏆 Ranked by Votes';
+    subEl.textContent = 'Most popular picks at the top.';
+  } else if (sortMode === 'price') {
+    titleEl.textContent = '💰 Cheapest First';
+    subEl.textContent = 'Best deals at the top — per night pricing.';
+  } else if (sortMode === 'kais') {
+    titleEl.textContent = "⭐ Kai's Picks First";
+    subEl.textContent = "Kai's top picks ranked first.";
+  } else {
+    titleEl.textContent = '10 Listings. One Winner.';
+    subEl.textContent = 'Vote, react, compare — find your vibe.';
+  }
+
+  renderLeaderboard();
+  updateComparePanelChips();
+}
+
+// ═══════════════════════════ LEADERBOARD ═══════════════════════════
+function renderLeaderboard() {
+  const sorted = [...LISTINGS].sort((a,b) => netVotes(b)-netVotes(a));
+  const maxV = Math.max(1, netVotes(sorted[0]), 5);
+  document.getElementById('leaderboard').innerHTML = sorted.map((l,i) => {
+    const nv = netVotes(l);
+    const pct = Math.max(0, (nv/maxV)*100);
+    const medal = i===0?'🥇':i===1?'🥈':i===2?'🥉':`${i+1}`;
+    return `<div class="lb-row">
+      <div class="lb-pos" style="color:${i<3?'var(--gold-light)':'rgba(250,245,236,0.3)'}">${medal}</div>
+      <div class="lb-info">
+        <div class="lb-name">${l.title}${l.kaisPick?' ⭐':''}</div>
+        <div class="lb-area">${l.area} · ${l.driveHr}</div>
+      </div>
+      <div class="lb-bar-bg"><div class="lb-bar-fill" style="width:${pct}%"></div></div>
+      <div class="lb-score">${nv>=0?'+':''}${nv} vote${Math.abs(nv)!==1?'s':''}</div>
+    </div>`;
+  }).join('');
+}
+
+// ═══════════════════════════ INTERACTIONS ═══════════════════════════
+function doVote(id, dir) {
+  const prev = myVote[id];
+  if (prev === dir) {
+    // Undo vote
+    if (dir === 'up') upvotes[id]--;
+    else downvotes[id]--;
+    myVote[id] = null;
+    fbWrite(`votes/${id}/${visitorId}`, null);
+  } else {
+    // Remove previous vote if switching
+    if (prev === 'up') upvotes[id]--;
+    if (prev === 'down') downvotes[id]--;
+    // Apply new vote
+    if (dir === 'up') upvotes[id]++;
+    else downvotes[id]++;
+    myVote[id] = dir;
+    fbWrite(`votes/${id}/${visitorId}`, dir);
+  }
+  render();
+}
+function toggleSaved(id, e) {
+  e.stopPropagation();
+  saved[id] = !saved[id];
+  render();
+}
+function setPhoto(id, idx, e) {
+  e && e.stopPropagation();
+  photoIdx[id] = idx;
+  render();
+}
+function changeGroup(d) {
+  groupSize = Math.max(1, Math.min(30, groupSize+d));
+  document.getElementById('group-count').textContent = groupSize;
+  LISTINGS.forEach(l => {
+    const el = document.getElementById(`ppp-${l.id}`);
+    if (el) el.textContent = `≈ $${ppp(l)}/person/night`;
+  });
+}
+function setSort(mode, btn) {
+  sortMode = mode;
+  document.querySelectorAll('.nav-tab').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  render();
+  if (mode !== 'default') {
+    document.getElementById('listings').scrollIntoView({ behavior: 'smooth' });
+  }
+}
+
+// Reactions
+function toggleReact(id, emoji, e) {
+  e && e.stopPropagation();
+  const r = reactions[id];
+  if (r.myReacts.has(emoji)) {
+    r.myReacts.delete(emoji); r[emoji] = Math.max(0, (r[emoji]||0)-1);
+    fbWrite(`reactions/${id}/${emoji}/${visitorId}`, null);
+  } else {
+    r.myReacts.add(emoji); r[emoji] = (r[emoji]||0)+1;
+    fbWrite(`reactions/${id}/${emoji}/${visitorId}`, true);
+  }
+  render();
+}
+function addReact(id, e) {
+  e.stopPropagation();
+  const unused = EMOJIS.filter(em => !reactions[id].myReacts.has(em));
+  if (!unused.length) return;
+  const emoji = unused[Math.floor(Math.random()*unused.length)];
+  toggleReact(id, emoji, null);
+}
+
+// Comments
+function submitComment(id) {
+  const inp = document.getElementById(`cinput-${id}`);
+  const val = inp.value.trim();
+  if (!val) return;
+  const name = visitorName || 'Anon';
+  const display = `${name}: ${val}`;
+  comments[id].push(display);
+  inp.value = '';
+  fbPush(`comments/${id}`, { name, text: val, time: Date.now() });
+  const list = document.getElementById(`clist-${id}`);
+  if (list) {
+    const item = document.createElement('div');
+    item.className = 'comment-item';
+    item.textContent = '💬 ' + display;
+    list.appendChild(item);
+  }
+}
+
+// ═══════════════════════════ LIGHTBOX ═══════════════════════════
+function openLightbox(id, idx) {
+  lbCard = LISTINGS.find(l=>l.id===id);
+  lbPhotoIdx = 0;
+  updateLb();
+  document.getElementById('lightbox').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+function closeLightbox() {
+  document.getElementById('lightbox').classList.remove('open');
+  document.body.style.overflow = '';
+}
+function updateLb() {
+  if (!lbCard) return;
+  document.getElementById('lb-img').src = lbCard.photos[lbPhotoIdx];
+  document.getElementById('lb-caption').textContent = `${lbCard.title} · ${lbCard.area} · Photo ${lbPhotoIdx+1} of ${lbCard.photos.length}`;
+}
+function lbNav(d) {
+  lbPhotoIdx = (lbPhotoIdx+d+lbCard.photos.length) % lbCard.photos.length;
+  updateLb();
+}
+document.getElementById('lightbox').addEventListener('click', e => { if(e.target===e.currentTarget) closeLightbox(); });
+
+// ═══════════════════════════ COMPARE ═══════════════════════════
+function toggleCompareMode() {
+  compareMode = !compareMode;
+  compareSelected = [];
+  const btn = document.getElementById('compare-toggle-btn');
+  btn.classList.toggle('active', compareMode);
+  btn.textContent = compareMode ? '✕ Exit Compare' : '⚖️ Compare';
+  document.getElementById('compare-panel').classList.toggle('show', compareMode);
+  document.querySelectorAll('.listings-grid').forEach(g => g.classList.toggle('compare-mode', compareMode));
+  render();
+}
+function toggleCompareSelect(id, e) {
+  e && e.stopPropagation();
+  if (compareSelected.includes(id)) {
+    compareSelected = compareSelected.filter(x=>x!==id);
+  } else if (compareSelected.length < 3) {
+    compareSelected.push(id);
+  }
+  updateComparePanelChips();
+  render();
+}
+function updateComparePanelChips() {
+  document.getElementById('compare-count').textContent = compareSelected.length;
+  const goBtn = document.getElementById('compare-go-btn');
+  goBtn.disabled = compareSelected.length < 2;
+  const chips = document.getElementById('compare-chips');
+  chips.innerHTML = compareSelected.map(id => {
+    const l = LISTINGS.find(x=>x.id===id);
+    return `<span class="compare-chip">${l.title} <button onclick="toggleCompareSelect(${id})">✕</button></span>`;
+  }).join('');
+}
+function openCompare() {
+  const sel = LISTINGS.filter(l => compareSelected.includes(l.id));
+  if (sel.length < 2) return;
+  const cols = sel.length;
+  const ROWS = [
+    ['Area', l => l.area],
+    ['Price/night', l => `$${l.price}`, (vals) => { const min = Math.min(...vals.map(v=>+v.replace('$',''))); return vals.map(v=>+v.replace('$','')===min?'best':''); }],
+    ['Total (3 nights)', l => `$${l.price*3}`],
+    [`Per person (${groupSize})`, l => `$${ppp(l)}/night`, (vals) => { const min = Math.min(...vals.map(v=>+v.split('/')[0].replace('$',''))); return vals.map(v=>+v.split('/')[0].replace('$','')===min?'best':''); }],
+    ['Drive from Toronto', l => l.driveHr],
+    ['Beds', l => l.beds + ' beds', (vals) => { const max = Math.max(...vals.map(v=>+v)); return vals.map(v=>+v===max?'best':''); }],
+    ['Guests', l => l.guests + ' max'],
+    ['Rating', l => `⭐ ${l.rating}`, (vals) => { const max = Math.max(...vals.map(v=>+v.replace('⭐ ',''))); return vals.map(v=>+v.replace('⭐ ','')===max?'best':''); }],
+    ...Object.keys(sel[0].amenities).map(a => [a, l => l.amenities[a] ? '✅ Yes' : '—', (vals) => vals.map(v => v==='✅ Yes'?'has':'no')]),
+  ];
+  let html = `<div class="compare-cols" style="--cols:${cols}">`;
+  // header
+  html += `<div class="compare-row-label"></div>`;
+  sel.forEach(l => {
+    html += `<div class="compare-col-header">
+      <img src="${l.photos[0]}" alt="${l.title}">
+      <div class="col-title">${l.title}</div>
+      <div class="col-area">${l.area}</div>
+    </div>`;
+  });
+  ROWS.forEach(([label, fn, highlightFn]) => {
+    const vals = sel.map(l => fn(l).toString());
+    const classes = highlightFn ? highlightFn(vals) : vals.map(()=>'');
+    html += `<div class="compare-row-label">${label}</div>`;
+    vals.forEach((v,i) => {
+      html += `<div class="compare-cell ${classes[i]||''}">${v}</div>`;
+    });
+  });
+  html += '</div>';
+  document.getElementById('compare-table').innerHTML = html;
+  document.getElementById('compare-modal').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+function closeCompare() {
+  document.getElementById('compare-modal').classList.remove('open');
+  document.body.style.overflow = '';
+}
+document.getElementById('compare-modal').addEventListener('click', e => { if(e.target===e.currentTarget) closeCompare(); });
+
+// Keys
+document.addEventListener('keydown', e => {
+  if (document.getElementById('lightbox').classList.contains('open')) {
+    if (e.key==='ArrowRight') lbNav(1);
+    else if (e.key==='ArrowLeft') lbNav(-1);
+    else if (e.key==='Escape') closeLightbox();
+  } else if (document.getElementById('compare-modal').classList.contains('open')) {
+    if (e.key==='Escape') closeCompare();
+  }
+});
+
+// ═══════════════════════════ ADD LISTING ═══════════════════════════
+function openAddModal() {
+  document.getElementById('add-modal-overlay').classList.add('show');
+  document.getElementById('add-form').classList.remove('loading');
+  document.getElementById('add-name').value = visitorName || '';
+  document.getElementById('add-url').value = '';
+  document.getElementById('add-status-text').className = 'status-text';
+  document.getElementById('add-status-text').textContent = 'Scraping Airbnb... hang tight';
+  setTimeout(() => document.getElementById('add-name').focus(), 100);
+}
+
+function closeAddModal() {
+  document.getElementById('add-modal-overlay').classList.remove('show');
+}
+
+async function submitAddListing() {
+  const name = document.getElementById('add-name').value.trim();
+  const url = document.getElementById('add-url').value.trim();
+
+  if (!name) {
+    document.getElementById('add-name').focus();
+    return;
+  }
+  if (!url || !url.includes('/rooms/')) {
+    document.getElementById('add-url').focus();
+    return;
+  }
+
+  // Show loading
+  const form = document.getElementById('add-form');
+  const statusText = document.getElementById('add-status-text');
+  form.classList.add('loading');
+  statusText.className = 'status-text';
+  statusText.textContent = 'Scraping Airbnb... hang tight';
+
+  try {
+    const resp = await fetch('/api/scrape', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ url })
+    });
+
+    const data = await resp.json();
+
+    if (!resp.ok || data.error) {
+      statusText.className = 'status-text error';
+      statusText.textContent = data.error || 'Something went wrong. Try again.';
+      // Show form again after 3s
+      setTimeout(() => form.classList.remove('loading'), 3000);
+      return;
+    }
+
+    // Build the new listing object
+    const newId = LISTINGS.length + 1;
+    const newListing = {
+      id: newId,
+      title: data.title || `Listing ${newId}`,
+      area: (data.location || 'Ontario').split(',')[0].trim(),
+      location: data.location || 'Ontario, ON',
+      beds: data.beds || 4,
+      baths: data.baths || 2,
+      guests: data.guests || 10,
+      price: 0,  // Price not available from scraping
+      rating: data.rating || 0,
+      reviews: data.reviews || 0,
+      driveHr: '—',
+      driveColor: '#9b7456',
+      kaisPick: false,
+      mapX: 300 + Math.random() * 200,
+      mapY: 170 + Math.random() * 40,
+      vibes: ['🆕 New Find'],
+      amenities: data.amenities || { "🛁 Hot Tub": false, "🏊 Lake": false, "🔥 Fire Pit": false, "🍖 BBQ": false, "🛶 Dock": false, "🧖 Sauna": false },
+      url: data.url,
+      photos: data.photos.length ? data.photos : [''],
+      addedBy: name
+    };
+
+    // Add to LISTINGS and initialize state
+    LISTINGS.push(newListing);
+    initListingState(newListing);
+    // Save to Firebase so everyone gets it
+    fbWrite(`addedListings/${newId}`, newListing);
+
+    // Success
+    statusText.className = 'status-text success';
+    statusText.textContent = `✓ Added "${newListing.title}" — ${name}'s pick!`;
+
+    // Re-render
+    render();
+
+    // Close modal after a beat
+    setTimeout(() => {
+      closeAddModal();
+      // Scroll to the new card
+      const newCard = document.getElementById(`card-${newId}`);
+      if (newCard) newCard.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }, 1500);
+
+  } catch (err) {
+    statusText.className = 'status-text error';
+    statusText.textContent = 'Network error — is the server running?';
+    setTimeout(() => form.classList.remove('loading'), 3000);
+  }
+}
+
+// ═══════════════════════════ INIT ═══════════════════════════
+setupFirebaseListeners();
+render();
+</script>
+</body>
+</html>

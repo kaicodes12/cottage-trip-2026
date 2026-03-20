@@ -541,6 +541,8 @@ body {
 .badge-kais { background: var(--rust); color: white; }
 .badge-fave { background: rgba(28,50,34,0.9); color: var(--gold-light); }
 .badge-compare { background: var(--lake); color: white; }
+.badge-water { background: rgba(74,127,160,0.9); color: white; }
+.badge-nowater { background: rgba(122,106,88,0.7); color: white; }
 
 .save-btn {
   position: absolute;
@@ -1515,6 +1517,23 @@ body {
 }
 .journal-post-meta { flex: 1; }
 .journal-post-author { font-weight: 700; font-size: 0.82rem; color: var(--charcoal); }
+.journal-delete-btn {
+  background: none;
+  border: 1px solid rgba(181,73,30,0.3);
+  color: var(--rust);
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  font-size: 0.75rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+  flex-shrink: 0;
+  margin-left: auto;
+}
+.journal-delete-btn:hover { background: var(--rust); color: white; border-color: var(--rust); }
 .journal-post-time { font-size: 0.65rem; color: var(--text-soft); }
 .journal-post-body {
   padding: 0.75rem 1.25rem;
@@ -1918,6 +1937,22 @@ footer strong { color: var(--gold); }
   font-size: 0.65rem;
   color: var(--text-soft);
 }
+.gallery-delete-btn {
+  background: none;
+  border: 1px solid rgba(181,73,30,0.3);
+  color: var(--rust);
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  font-size: 0.65rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+  flex-shrink: 0;
+}
+.gallery-delete-btn:hover { background: var(--rust); color: white; border-color: var(--rust); }
 .cal-legend {
   display: flex;
   gap: 1.5rem;
@@ -3108,6 +3143,7 @@ function renderCard(l, delay, rank) {
       <div class="card-badges">
         ${l.kaisPick?'<span class="badge badge-kais">⭐ Kai\'s Pick</span>':''}
         ${nv>=4?'<span class="badge badge-fave">🏆 Squad Fave</span>':''}
+        ${l.amenities['🏊 Lake']?'<span class="badge badge-water">🌊 Waterfront</span>':'<span class="badge badge-nowater">🚫 Not on Water</span>'}
         ${isCmpSel&&compareMode?'<span class="badge badge-compare">⚖️ Comparing</span>':''}
       </div>
       <button class="save-btn" onclick="toggleSaved(${l.id},event)">${saved[l.id]?'❤️':'🤍'}</button>
@@ -3795,7 +3831,7 @@ function processFiles(files) {
         canvas.height = h;
         canvas.getContext('2d').drawImage(img, 0, 0, w, h);
         const dataUrl = canvas.toDataURL('image/jpeg', 0.65);
-        const entry = { data: dataUrl, name: visitorName, time: Date.now() };
+        const entry = { data: dataUrl, name: visitorName, authorId: visitorId, time: Date.now() };
         if (FB_READY) {
           db.ref('gallery').push(entry);
         } else {
@@ -3818,14 +3854,23 @@ function renderGallery() {
   container.innerHTML = galleryImages.map((img, i) => {
     const date = new Date(img.time);
     const time = `${date.getMonth()+1}/${date.getDate()}`;
-    return `<div class="gallery-item" onclick="openGalleryLightbox(${i})">
-      <img src="${img.data}" alt="Upload by ${img.name}" loading="lazy">
+    const canDelete = img.authorId === visitorId;
+    return `<div class="gallery-item">
+      <img src="${img.data}" alt="Upload by ${img.name}" loading="lazy" onclick="openGalleryLightbox(${i})">
       <div class="gallery-item-footer">
         <span class="gallery-item-name">📸 ${img.name}</span>
         <span class="gallery-item-time">${time}</span>
+        ${canDelete ? `<button class="gallery-delete-btn" onclick="deleteGalleryItem('${img._fbKey}',event)" title="Delete">✕</button>` : ''}
       </div>
     </div>`;
   }).join('');
+}
+
+function deleteGalleryItem(key, e) {
+  e.stopPropagation();
+  if (!key || !FB_READY) return;
+  if (!confirm('Delete this pic?')) return;
+  db.ref(`gallery/${key}`).remove();
 }
 
 function openGalleryLightbox(idx) {
@@ -3842,7 +3887,7 @@ function openGalleryLightbox(idx) {
 if (FB_READY) {
   db.ref('gallery').on('value', snap => {
     const data = snap.val() || {};
-    galleryImages = Object.values(data).sort((a,b) => b.time - a.time);
+    galleryImages = Object.entries(data).map(([key, val]) => ({ ...val, _fbKey: key })).sort((a,b) => b.time - a.time);
     renderGallery();
   });
 }
@@ -3961,6 +4006,7 @@ function renderJournal() {
       });
     }
 
+    const canDelete = post.authorId === visitorId;
     return `<div class="journal-post">
       <div class="journal-post-header">
         <div class="journal-post-avatar">${initial}</div>
@@ -3968,11 +4014,18 @@ function renderJournal() {
           <div class="journal-post-author">${post.author}</div>
           <div class="journal-post-time">${timeStr}</div>
         </div>
+        ${canDelete ? `<button class="journal-delete-btn" onclick="deleteJournalPost('${post._fbKey}')" title="Delete post">✕</button>` : ''}
       </div>
       ${post.text ? `<div class="journal-post-body">${post.text.replace(/</g,'&lt;').replace(/\n/g,'<br>')}</div>` : ''}
       ${mediaHtml}
     </div>`;
   }).join('');
+}
+
+function deleteJournalPost(key) {
+  if (!key || !FB_READY) return;
+  if (!confirm('Delete this post?')) return;
+  db.ref(`journal/${key}`).remove();
 }
 
 function openJournalLightbox(postIdx, photoIdx) {
@@ -3989,7 +4042,7 @@ function openJournalLightbox(postIdx, photoIdx) {
 if (FB_READY) {
   db.ref('journal').on('value', snap => {
     const data = snap.val() || {};
-    journalPosts = Object.values(data).sort((a,b) => b.time - a.time);
+    journalPosts = Object.entries(data).map(([key, val]) => ({ ...val, _fbKey: key })).sort((a,b) => b.time - a.time);
     renderJournal();
   });
 }

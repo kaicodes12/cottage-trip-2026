@@ -224,6 +224,91 @@ body {
   box-shadow: 0 4px 20px rgba(0,0,0,0.2);
 }
 
+.nav-menu-btn {
+  background: none;
+  border: 1px solid rgba(255,255,255,0.15);
+  color: var(--gold-light);
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  font-size: 1rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+  flex-shrink: 0;
+}
+.nav-menu-btn:hover { background: rgba(255,255,255,0.08); }
+
+.nav-menu-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(22,30,24,0.7);
+  backdrop-filter: blur(4px);
+  z-index: 9000;
+  display: none;
+  align-items: flex-start;
+  justify-content: flex-start;
+}
+.nav-menu-overlay.show { display: flex; }
+.nav-menu-panel {
+  background: var(--forest);
+  width: 280px;
+  height: 100%;
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  box-shadow: 8px 0 40px rgba(0,0,0,0.3);
+  animation: slideInMenu 0.25s ease;
+}
+@keyframes slideInMenu {
+  from { transform: translateX(-100%); }
+  to { transform: translateX(0); }
+}
+.nav-menu-close {
+  align-self: flex-end;
+  background: none;
+  border: 1px solid rgba(255,255,255,0.15);
+  color: white;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  font-size: 0.9rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 0.5rem;
+}
+.nav-menu-close:hover { background: rgba(255,255,255,0.08); }
+.nav-menu-title {
+  font-family: 'Lora', serif;
+  font-size: 1.1rem;
+  color: var(--gold-light);
+  font-weight: 700;
+  margin-bottom: 1rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 1px solid rgba(255,255,255,0.1);
+}
+.nav-menu-link {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 14px;
+  border-radius: 10px;
+  color: rgba(250,245,236,0.75);
+  text-decoration: none;
+  font-size: 0.88rem;
+  font-weight: 600;
+  transition: all 0.15s;
+}
+.nav-menu-link:hover {
+  background: rgba(255,255,255,0.08);
+  color: var(--cream);
+}
+
 .nav-logo {
   font-family: 'Lora', serif;
   font-style: italic;
@@ -2412,6 +2497,7 @@ footer strong { color: var(--gold); }
 
 <!-- ═══════════════════════════ STICKY NAV ═══════════════════════════ -->
 <div class="sticky-nav">
+  <button class="nav-menu-btn" onclick="toggleNavMenu()">☰</button>
   <span class="nav-logo">Cottage '26</span>
   <div class="nav-spacer"></div>
 
@@ -2444,7 +2530,7 @@ footer strong { color: var(--gold); }
 </div>
 
 <!-- ═══════════════════════════ MEME WALL ═══════════════════════════ -->
-<div class="creativity-wrap">
+<div class="creativity-wrap" id="memes">
   <div class="creativity-inner">
     <div class="section-eyebrow">🎨 Squad Creativity</div>
     <div class="section-title" style="font-family:'Lora',serif;font-size:2rem;color:var(--forest);margin-bottom:0.4rem;">Meme Wall</div>
@@ -2467,7 +2553,7 @@ footer strong { color: var(--gold); }
 </div>
 
 <!-- ═══════════════════════════ CALENDAR ═══════════════════════════ -->
-<div class="calendar-wrap">
+<div class="calendar-wrap" id="calendar">
   <div class="calendar-inner">
     <div class="section-eyebrow">📅 When Can't You Make It?</div>
     <div class="section-title" style="font-family:'Lora',serif;font-size:2rem;color:var(--forest);margin-bottom:0.4rem;">June 2026 — Mark Your Blackout Dates</div>
@@ -2500,7 +2586,7 @@ footer strong { color: var(--gold); }
 </div>
 
 <!-- ═══════════════════════════ LEADERBOARD ═══════════════════════════ -->
-<div class="leaderboard-wrap">
+<div class="leaderboard-wrap" id="leaderboard-section">
   <div class="leaderboard-inner">
     <h2 class="lb-title">🏆 Vote Leaderboard</h2>
     <p class="lb-sub">Updates as the squad votes · keep scrolling</p>
@@ -2509,7 +2595,7 @@ footer strong { color: var(--gold); }
 </div>
 
 <!-- ═══════════════════════════ MAP ═══════════════════════════ -->
-<div class="map-section-wrap">
+<div class="map-section-wrap" id="map-section">
   <div class="map-container">
     <div class="section-eyebrow">📍 Where They Are</div>
     <div class="section-title">Ontario Cottage Corridor</div>
@@ -2554,7 +2640,7 @@ footer strong { color: var(--gold); }
 </div>
 
 <!-- ═══════════════════════════ TRIP JOURNAL ═══════════════════════════ -->
-<div class="journal-wrap">
+<div class="journal-wrap" id="journal">
   <div class="journal-inner">
     <div class="section-eyebrow">📖 Trip Journal</div>
     <div class="section-title" style="font-family:'Lora',serif;font-size:2rem;color:var(--forest);margin-bottom:0.4rem;">Squad Stories</div>
@@ -2574,7 +2660,7 @@ footer strong { color: var(--gold); }
 </div>
 
 <!-- ═══════════════════════════ WEATHER ═══════════════════════════ -->
-<div class="weather-wrap">
+<div class="weather-wrap" id="weather">
   <div class="weather-inner">
     <div class="section-eyebrow">🌤️ Weather Intel</div>
     <div class="section-title" style="font-family:'Lora',serif;font-size:2rem;color:var(--forest);margin-bottom:0.4rem;">What to Expect in June</div>
@@ -2588,6 +2674,22 @@ footer strong { color: var(--gold); }
 <footer>
   Built for the <strong>Summer 2026</strong> Squad Trip · Ontario Cottage Country
 </footer>
+
+<!-- ═══════════════════════════ NAV MENU ═══════════════════════════ -->
+<div class="nav-menu-overlay" id="nav-menu-overlay" onclick="if(event.target===this)closeNavMenu()">
+  <div class="nav-menu-panel">
+    <button class="nav-menu-close" onclick="closeNavMenu()">✕</button>
+    <div class="nav-menu-title">Jump to Section</div>
+    <a class="nav-menu-link" href="#memes" onclick="closeNavMenu()">🎨 Meme Wall</a>
+    <a class="nav-menu-link" href="#listings" onclick="closeNavMenu()">🏕️ Listings</a>
+    <a class="nav-menu-link" href="#calendar" onclick="closeNavMenu()">📅 Calendar</a>
+    <a class="nav-menu-link" href="#leaderboard-section" onclick="closeNavMenu()">🏆 Leaderboard</a>
+    <a class="nav-menu-link" href="#map-section" onclick="closeNavMenu()">📍 Map</a>
+    <a class="nav-menu-link" href="#journal" onclick="closeNavMenu()">📖 Trip Journal</a>
+    <a class="nav-menu-link" href="#weather" onclick="closeNavMenu()">🌤️ Weather</a>
+    <a class="nav-menu-link" href="#top" onclick="closeNavMenu()">⬆️ Back to Top</a>
+  </div>
+</div>
 
 <!-- ═══════════════════════════ WEATHER DETAIL MODAL ═══════════════════════════ -->
 <div class="weather-modal" id="weather-modal" onclick="if(event.target===this)closeWeatherModal()">
@@ -3028,6 +3130,12 @@ function saveName() {
   setupPresence();
   renderSquadBar();
   updateUserBtn();
+  // Send welcome email (fire and forget)
+  fetch('/api/welcome', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ name, email })
+  }).catch(() => {});
 }
 
 // Show name prompt if no name saved
@@ -3059,6 +3167,13 @@ function signIn() {
   document.getElementById('avatar-preview').innerHTML = '<span id="avatar-preview-letter">?</span>';
   visitorAvatar = '';
   setTimeout(() => document.getElementById('name-input').focus(), 100);
+}
+
+function toggleNavMenu() {
+  document.getElementById('nav-menu-overlay').classList.toggle('show');
+}
+function closeNavMenu() {
+  document.getElementById('nav-menu-overlay').classList.remove('show');
 }
 
 function toggleUserMenu() {

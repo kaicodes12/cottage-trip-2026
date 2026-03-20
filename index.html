@@ -893,6 +893,20 @@ body {
   transition: all 0.2s;
 }
 .lb-arrow:hover { background: rgba(255,255,255,0.16); }
+.lb-delete {
+  background: rgba(181,73,30,0.85);
+  color: white;
+  border: none;
+  border-radius: 100px;
+  padding: 8px 20px;
+  font-size: 0.78rem;
+  font-weight: 700;
+  cursor: pointer;
+  font-family: 'Nunito', sans-serif;
+  transition: background 0.2s;
+  margin-top: 0.5rem;
+}
+.lb-delete:hover { background: var(--rust-light); }
 
 /* ═══════════════════════════ LEADERBOARD ═══════════════════════════ */
 .leaderboard-wrap {
@@ -2448,6 +2462,7 @@ footer strong { color: var(--gold); }
       <button class="lb-arrow" onclick="lbNav(-1)">←</button>
       <button class="lb-arrow" onclick="lbNav(1)">→</button>
     </div>
+    <button class="lb-delete" id="lb-delete" onclick="lbDelete()" style="display:none">🗑️ Delete</button>
   </div>
 </div>
 
@@ -2909,6 +2924,7 @@ let reactions = {};
 let comments = {};
 let photoIdx = {};
 let lbCard = null, lbPhotoIdx = 0;
+let lbContext = null; // { type: 'gallery'|'journal', index, fbKey }
 
 const EMOJIS = ['🔥','😍','👀','🤔','💸','❤️'];
 
@@ -3377,6 +3393,7 @@ function submitComment(id) {
 function openLightbox(id, idx) {
   lbCard = LISTINGS.find(l=>l.id===id);
   lbPhotoIdx = 0;
+  lbContext = null;
   updateLb();
   document.getElementById('lightbox').classList.add('open');
   document.body.style.overflow = 'hidden';
@@ -3389,6 +3406,30 @@ function updateLb() {
   if (!lbCard) return;
   document.getElementById('lb-img').src = lbCard.photos[lbPhotoIdx];
   document.getElementById('lb-caption').textContent = `${lbCard.title} · ${lbCard.area || ''} · Photo ${lbPhotoIdx+1} of ${lbCard.photos.length}`;
+  // Show delete button if this is user's own gallery/journal content
+  const delBtn = document.getElementById('lb-delete');
+  let showDel = false;
+  if (lbContext && lbContext.type === 'gallery') {
+    const img = galleryImages[lbPhotoIdx];
+    if (img && img.authorId === visitorId) showDel = true;
+  } else if (lbContext && lbContext.type === 'journal') {
+    const post = journalPosts[lbContext.postIdx];
+    if (post && post.authorId === visitorId) showDel = true;
+  }
+  delBtn.style.display = showDel ? 'inline-block' : 'none';
+}
+function lbDelete() {
+  if (!lbContext || !FB_READY) return;
+  if (!confirm('Delete this?')) return;
+  if (lbContext.type === 'gallery') {
+    const img = galleryImages[lbPhotoIdx];
+    if (img && img._fbKey) db.ref(`gallery/${img._fbKey}`).remove();
+    closeLightbox();
+  } else if (lbContext.type === 'journal') {
+    const post = journalPosts[lbContext.postIdx];
+    if (post && post._fbKey) db.ref(`journal/${post._fbKey}`).remove();
+    closeLightbox();
+  }
 }
 function lbNav(d) {
   lbPhotoIdx = (lbPhotoIdx+d+lbCard.photos.length) % lbCard.photos.length;
@@ -3878,6 +3919,7 @@ function openGalleryLightbox(idx) {
   if (!img) return;
   lbCard = { photos: galleryImages.map(g => g.data), title: img.name + "'s upload", area: 'Squad Creativity' };
   lbPhotoIdx = idx;
+  lbContext = { type: 'gallery' };
   updateLb();
   document.getElementById('lightbox').classList.add('open');
   document.body.style.overflow = 'hidden';
@@ -4031,6 +4073,7 @@ function deleteJournalPost(key) {
 function openJournalLightbox(postIdx, photoIdx) {
   const post = journalPosts[postIdx];
   if (!post || !post.photos) return;
+  lbContext = { type: 'journal', postIdx };
   lbCard = { photos: post.photos, title: post.author + "'s post", area: 'Trip Journal' };
   lbPhotoIdx = photoIdx;
   updateLb();

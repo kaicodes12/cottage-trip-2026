@@ -1172,6 +1172,80 @@ body {
 }
 .add-listing-btn:hover { background: var(--forest-light); }
 
+.nav-user-btn {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: var(--gold);
+  color: var(--forest);
+  border: 2px solid rgba(255,255,255,0.2);
+  font-size: 0.78rem;
+  font-weight: 800;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Nunito', sans-serif;
+  transition: all 0.2s;
+  flex-shrink: 0;
+  position: relative;
+}
+.nav-user-btn:hover { transform: scale(1.1); }
+.nav-user-btn.signed-out {
+  background: rgba(255,255,255,0.1);
+  color: rgba(250,245,236,0.5);
+  border-color: rgba(255,255,255,0.15);
+  font-size: 0.7rem;
+}
+.user-menu {
+  position: absolute;
+  top: 100%;
+  right: 1rem;
+  background: var(--card-bg);
+  border-radius: 14px;
+  padding: 1rem 1.2rem;
+  box-shadow: 0 12px 40px rgba(0,0,0,0.2);
+  border: 1px solid var(--sand);
+  min-width: 200px;
+  display: none;
+  z-index: 600;
+}
+.user-menu.show { display: block; }
+.user-menu-name {
+  font-weight: 700;
+  font-size: 0.9rem;
+  color: var(--charcoal);
+  margin-bottom: 2px;
+}
+.user-menu-email {
+  font-size: 0.72rem;
+  color: var(--text-soft);
+  margin-bottom: 0.8rem;
+  padding-bottom: 0.8rem;
+  border-bottom: 1px solid var(--sand);
+}
+.user-menu-action {
+  width: 100%;
+  padding: 8px 14px;
+  border-radius: 10px;
+  border: none;
+  font-family: 'Nunito', sans-serif;
+  font-weight: 700;
+  font-size: 0.78rem;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.user-menu-action.sign-out {
+  background: rgba(181,73,30,0.1);
+  color: var(--rust);
+}
+.user-menu-action.sign-out:hover { background: rgba(181,73,30,0.2); }
+.user-menu-action.sign-in {
+  background: var(--rust);
+  color: white;
+}
+.user-menu-action.sign-in:hover { background: var(--rust-light); }
+
 .add-modal-overlay {
   position: fixed;
   inset: 0;
@@ -1618,6 +1692,8 @@ footer strong { color: var(--gold); }
   .group-widget { display: none; }
   .compare-toggle { font-size: 0.65rem; padding: 4px 10px; }
   .add-listing-btn { font-size: 0.7rem; padding: 5px 12px; }
+  .nav-user-btn { width: 28px; height: 28px; font-size: 0.7rem; }
+  .user-menu { right: 0.5rem; min-width: 180px; }
 
   /* Sections */
   .section { padding: 2.5rem 1rem; }
@@ -2288,6 +2364,12 @@ footer strong { color: var(--gold); }
 
   <button class="compare-toggle" id="compare-toggle-btn" onclick="toggleCompareMode()">⚖️ Compare</button>
   <button class="add-listing-btn" onclick="openAddModal()">+ Add Listing</button>
+  <button class="nav-user-btn" id="nav-user-btn" onclick="toggleUserMenu()"></button>
+  <div class="user-menu" id="user-menu">
+    <div class="user-menu-name" id="user-menu-name"></div>
+    <div class="user-menu-email" id="user-menu-email"></div>
+    <button class="user-menu-action" id="user-menu-action"></button>
+  </div>
 </div>
 
 <!-- ═══════════════════════════ SQUAD BAR ═══════════════════════════ -->
@@ -2846,6 +2928,7 @@ function saveName() {
   document.getElementById('name-overlay').classList.add('hidden');
   setupPresence();
   renderSquadBar();
+  updateUserBtn();
 }
 
 // Show name prompt if no name saved
@@ -2854,6 +2937,70 @@ if (visitorName) {
 } else {
   setTimeout(() => document.getElementById('name-input').focus(), 300);
 }
+
+function signOut() {
+  visitorName = '';
+  visitorEmail = '';
+  localStorage.removeItem('cottage_visitor_name');
+  localStorage.removeItem('cottage_visitor_email');
+  if (FB_READY) {
+    db.ref(`presence/${visitorId}`).set({ name: '', online: false, lastSeen: Date.now() });
+  }
+  updateUserBtn();
+  closeUserMenu();
+}
+
+function signIn() {
+  closeUserMenu();
+  document.getElementById('name-overlay').classList.remove('hidden');
+  document.getElementById('name-input').value = '';
+  document.getElementById('email-input').value = '';
+  setTimeout(() => document.getElementById('name-input').focus(), 100);
+}
+
+function toggleUserMenu() {
+  document.getElementById('user-menu').classList.toggle('show');
+}
+function closeUserMenu() {
+  document.getElementById('user-menu').classList.remove('show');
+}
+// Close menu when clicking outside
+document.addEventListener('click', e => {
+  const menu = document.getElementById('user-menu');
+  const btn = document.getElementById('nav-user-btn');
+  if (menu && !menu.contains(e.target) && !btn.contains(e.target)) {
+    menu.classList.remove('show');
+  }
+});
+
+function updateUserBtn() {
+  const btn = document.getElementById('nav-user-btn');
+  const menuName = document.getElementById('user-menu-name');
+  const menuEmail = document.getElementById('user-menu-email');
+  const menuAction = document.getElementById('user-menu-action');
+
+  if (visitorName) {
+    btn.textContent = visitorName[0].toUpperCase();
+    btn.className = 'nav-user-btn';
+    btn.title = visitorName;
+    menuName.textContent = visitorName;
+    menuEmail.textContent = visitorEmail || '';
+    menuEmail.style.display = visitorEmail ? 'block' : 'none';
+    menuAction.textContent = 'Sign Out';
+    menuAction.className = 'user-menu-action sign-out';
+    menuAction.onclick = signOut;
+  } else {
+    btn.textContent = '→';
+    btn.className = 'nav-user-btn signed-out';
+    btn.title = 'Sign in';
+    menuName.textContent = 'Not signed in';
+    menuEmail.style.display = 'none';
+    menuAction.textContent = 'Sign In';
+    menuAction.className = 'user-menu-action sign-in';
+    menuAction.onclick = signIn;
+  }
+}
+updateUserBtn();
 
 // ═══════════════════════════ PRESENCE + SQUAD BAR ═══════════════════════════
 let squadUsers = {}; // { visitorId: { name, email, online, lastSeen } }

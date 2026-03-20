@@ -3130,12 +3130,6 @@ function saveName() {
   setupPresence();
   renderSquadBar();
   updateUserBtn();
-  // Send welcome email (fire and forget)
-  fetch('/api/welcome', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ name, email })
-  }).catch(() => {});
 }
 
 // Show name prompt if no name saved

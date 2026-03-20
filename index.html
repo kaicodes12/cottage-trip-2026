@@ -3406,16 +3406,9 @@ function updateLb() {
   if (!lbCard) return;
   document.getElementById('lb-img').src = lbCard.photos[lbPhotoIdx];
   document.getElementById('lb-caption').textContent = `${lbCard.title} · ${lbCard.area || ''} · Photo ${lbPhotoIdx+1} of ${lbCard.photos.length}`;
-  // Show delete button if this is user's own gallery/journal content
+  // Show delete button for gallery/journal content
   const delBtn = document.getElementById('lb-delete');
-  let showDel = false;
-  if (lbContext && lbContext.type === 'gallery') {
-    const img = galleryImages[lbPhotoIdx];
-    if (img && img.authorId === visitorId) showDel = true;
-  } else if (lbContext && lbContext.type === 'journal') {
-    const post = journalPosts[lbContext.postIdx];
-    if (post && post.authorId === visitorId) showDel = true;
-  }
+  const showDel = lbContext && (lbContext.type === 'gallery' || lbContext.type === 'journal');
   delBtn.style.display = showDel ? 'inline-block' : 'none';
 }
 function lbDelete() {

@@ -1366,6 +1366,468 @@ footer strong { color: var(--gold); }
   .listings-grid { grid-template-columns: 1fr; }
   .nav-tabs { display: none; }
   .compare-go-btn { font-size: 0.7rem; padding: 6px 14px; }
+  .cal-grid { gap: 3px; }
+  .cal-day { font-size: 0.75rem; }
+  .gallery-grid { grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); }
+}
+
+/* ═══════════════════════════ CALENDAR ═══════════════════════════ */
+.calendar-wrap {
+  background: var(--parchment);
+  padding: 4rem 0;
+}
+.calendar-inner {
+  max-width: 700px;
+  margin: 0 auto;
+  padding: 0 1.5rem;
+}
+.cal-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 5px;
+  margin-bottom: 1.5rem;
+}
+.cal-header {
+  text-align: center;
+  font-weight: 700;
+  font-size: 0.72rem;
+  color: var(--text-soft);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  padding: 8px 0;
+}
+.cal-day {
+  aspect-ratio: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  border-radius: 12px;
+  border: 2px solid transparent;
+  background: var(--card-bg);
+  cursor: pointer;
+  transition: all 0.2s;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--text);
+  position: relative;
+}
+.cal-day:hover { border-color: var(--forest-light); transform: scale(1.05); }
+.cal-day.selected { background: var(--forest); color: white; border-color: var(--forest); }
+.cal-day.range-start, .cal-day.range-end { background: var(--forest); color: white; border-color: var(--forest); font-weight: 800; }
+.cal-day.in-range { background: rgba(44,74,52,0.18); color: var(--forest); border-color: rgba(44,74,52,0.3); }
+.cal-day.hover-preview { background: rgba(44,74,52,0.1); border-color: rgba(44,74,52,0.2); transition: background 0.1s; }
+.cal-day.target-range { background: rgba(74,127,160,0.18); border-color: var(--lake); color: var(--lake); }
+.cal-day.target-start, .cal-day.target-end { background: var(--lake); color: white; border-color: var(--lake); font-weight: 800; }
+.cal-day.target-range.range-start, .cal-day.target-start.range-start,
+.cal-day.target-range.range-end, .cal-day.target-end.range-end,
+.cal-day.target-range.in-range { background: linear-gradient(135deg, var(--lake), var(--forest)); color: white; border-color: var(--forest); }
+.cal-day.empty { background: none; cursor: default; pointer-events: none; }
+.cal-day .cal-count {
+  font-size: 0.55rem;
+  color: var(--gold);
+  font-weight: 800;
+  margin-top: 1px;
+}
+.cal-day.selected .cal-count { color: var(--gold-light); }
+.cal-actions {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+.cal-done-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--rust);
+  color: white;
+  border: none;
+  border-radius: 100px;
+  padding: 12px 28px;
+  font-family: 'Nunito', sans-serif;
+  font-weight: 700;
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.cal-done-btn:hover { background: var(--rust-light); transform: translateY(-1px); }
+.cal-done-btn.saved { background: var(--forest); }
+.cal-summary {
+  font-size: 0.78rem;
+  color: var(--text-soft);
+}
+.cal-summary strong { color: var(--forest); }
+.cal-names-row {
+  margin-top: 1.2rem;
+  padding: 1rem;
+  background: var(--card-bg);
+  border-radius: 14px;
+  border: 1px solid var(--sand);
+}
+.cal-names-row .cal-best-label {
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--rust);
+  margin-bottom: 0.4rem;
+}
+.cal-names-row .cal-best-dates {
+  font-family: 'Lora', serif;
+  font-size: 1.1rem;
+  color: var(--forest);
+  font-weight: 700;
+  margin-bottom: 0.3rem;
+}
+.cal-names-row .cal-who {
+  font-size: 0.75rem;
+  color: var(--text-soft);
+}
+
+/* ═══════════════════════════ CREATIVITY GALLERY ═══════════════════════════ */
+.creativity-wrap {
+  background: var(--cream);
+  padding: 4rem 0;
+}
+.creativity-inner {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 1.5rem;
+}
+.upload-zone {
+  border: 2px dashed var(--sand);
+  border-radius: 14px;
+  padding: 1rem 1.5rem;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.3s;
+  background: var(--card-bg);
+  margin-bottom: 1.5rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+}
+.upload-zone:hover, .upload-zone.dragover {
+  border-color: var(--rust);
+  background: var(--parchment);
+}
+.upload-zone-icon { font-size: 1.3rem; }
+.upload-zone-text { color: var(--text-soft); font-size: 0.8rem; }
+.upload-zone-text strong { color: var(--rust); }
+.gallery-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 1rem;
+}
+.gallery-item {
+  border-radius: 16px;
+  overflow: hidden;
+  background: var(--card-bg);
+  box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+  transition: transform 0.3s, box-shadow 0.3s;
+  cursor: pointer;
+}
+.gallery-item:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 32px rgba(0,0,0,0.12);
+}
+.gallery-item img {
+  width: 100%;
+  height: 220px;
+  object-fit: cover;
+  display: block;
+}
+.gallery-item-footer {
+  padding: 0.7rem 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.gallery-item-name {
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--bark);
+}
+.gallery-item-time {
+  font-size: 0.65rem;
+  color: var(--text-soft);
+}
+.cal-legend {
+  display: flex;
+  gap: 1.5rem;
+  margin-bottom: 1.5rem;
+  flex-wrap: wrap;
+}
+.cal-legend-item {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 0.78rem;
+  color: var(--text);
+  font-weight: 600;
+}
+.cal-legend-swatch {
+  width: 18px;
+  height: 18px;
+  border-radius: 6px;
+  border: 2px solid;
+}
+
+/* ═══════════════════════════ WEATHER ═══════════════════════════ */
+.weather-wrap {
+  background: var(--parchment);
+  padding: 4rem 0;
+}
+.weather-inner {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 1.5rem;
+}
+.weather-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 1.2rem;
+}
+.weather-loading {
+  grid-column: 1 / -1;
+  text-align: center;
+  padding: 2rem;
+  color: var(--text-soft);
+  font-size: 0.85rem;
+}
+.weather-card {
+  background: var(--card-bg);
+  border-radius: 18px;
+  padding: 1.5rem;
+  border: 1px solid var(--sand);
+  box-shadow: 0 2px 12px rgba(0,0,0,0.04);
+  transition: transform 0.3s;
+}
+.weather-card:hover { transform: translateY(-3px); }
+.weather-card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+}
+.weather-card-area {
+  font-size: 0.68rem;
+  font-weight: 800;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--rust);
+}
+.weather-card-now {
+  font-size: 0.65rem;
+  font-weight: 700;
+  color: var(--lake);
+  background: rgba(74,127,160,0.1);
+  padding: 3px 9px;
+  border-radius: 100px;
+}
+.weather-current {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1.2rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid var(--sand);
+}
+.weather-temp-now {
+  font-family: 'Lora', serif;
+  font-size: 2.4rem;
+  font-weight: 700;
+  color: var(--forest);
+  line-height: 1;
+}
+.weather-icon { font-size: 2rem; }
+.weather-desc {
+  font-size: 0.78rem;
+  color: var(--text-soft);
+  font-weight: 600;
+}
+.weather-wind {
+  font-size: 0.7rem;
+  color: var(--text-soft);
+}
+.weather-june-title {
+  font-size: 0.68rem;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--bark-light);
+  margin-bottom: 0.7rem;
+}
+.weather-june-stats {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.6rem;
+}
+.weather-stat {
+  background: var(--parchment);
+  border-radius: 10px;
+  padding: 0.6rem 0.8rem;
+}
+.weather-stat-label {
+  font-size: 0.62rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--text-soft);
+  margin-bottom: 2px;
+}
+.weather-stat-value {
+  font-family: 'Lora', serif;
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--forest);
+}
+.weather-stat-value .unit {
+  font-family: 'Nunito', sans-serif;
+  font-size: 0.7rem;
+  font-weight: 400;
+  color: var(--text-soft);
+}
+.weather-card { cursor: pointer; }
+.weather-card-hint {
+  text-align: center;
+  font-size: 0.68rem;
+  color: var(--text-soft);
+  margin-top: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 0.03em;
+}
+
+/* Weather Detail Modal */
+.weather-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 2000;
+  background: rgba(22,30,24,0.94);
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  overflow-y: auto;
+  padding: 2rem;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s;
+}
+.weather-modal.open { opacity: 1; pointer-events: all; }
+.weather-modal-inner {
+  background: var(--cream);
+  border-radius: 22px;
+  overflow: hidden;
+  width: 100%;
+  max-width: 700px;
+  margin: auto;
+}
+.weather-modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1.25rem 1.75rem;
+  background: var(--forest);
+}
+.weather-modal-header h2 {
+  font-family: 'Lora', serif;
+  color: var(--cream);
+  font-size: 1.2rem;
+}
+.weather-modal-body {
+  padding: 1.75rem;
+}
+.weather-detail-section {
+  margin-bottom: 1.5rem;
+}
+.weather-detail-label {
+  font-size: 0.7rem;
+  font-weight: 800;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--rust);
+  margin-bottom: 0.8rem;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.weather-detail-label .badge-projected {
+  font-size: 0.58rem;
+  background: rgba(74,127,160,0.12);
+  color: var(--lake);
+  padding: 2px 8px;
+  border-radius: 100px;
+  letter-spacing: 0.06em;
+  font-weight: 700;
+}
+.weather-days {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.weather-day-row {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.65rem 0.9rem;
+  background: var(--card-bg);
+  border-radius: 12px;
+  border: 1px solid var(--sand);
+}
+.weather-day-row.trip-day {
+  border-color: var(--lake);
+  background: rgba(74,127,160,0.06);
+}
+.weather-day-name {
+  font-weight: 700;
+  font-size: 0.78rem;
+  color: var(--text);
+  min-width: 80px;
+}
+.weather-day-date {
+  font-size: 0.68rem;
+  color: var(--text-soft);
+  min-width: 50px;
+}
+.weather-day-icon { font-size: 1.3rem; min-width: 30px; text-align: center; }
+.weather-day-desc {
+  font-size: 0.75rem;
+  color: var(--text-soft);
+  flex: 1;
+  min-width: 0;
+}
+.weather-day-temps {
+  display: flex;
+  gap: 8px;
+  font-size: 0.8rem;
+  font-weight: 700;
+  white-space: nowrap;
+}
+.weather-day-hi { color: var(--rust); }
+.weather-day-lo { color: var(--lake); }
+.weather-day-precip {
+  font-size: 0.68rem;
+  color: var(--text-soft);
+  min-width: 45px;
+  text-align: right;
+}
+.weather-note {
+  font-size: 0.72rem;
+  color: var(--text-soft);
+  background: var(--parchment);
+  padding: 0.8rem 1rem;
+  border-radius: 10px;
+  border-left: 3px solid var(--lake);
+  line-height: 1.5;
+}
+
+.gallery-empty {
+  text-align: center;
+  padding: 3rem;
+  color: var(--text-soft);
+  font-size: 0.9rem;
+  grid-column: 1 / -1;
 }
 </style>
 </head>
@@ -1414,12 +1876,60 @@ footer strong { color: var(--gold); }
   <button class="add-listing-btn" onclick="openAddModal()">+ Add Listing</button>
 </div>
 
+<!-- ═══════════════════════════ MEME WALL ═══════════════════════════ -->
+<div class="creativity-wrap">
+  <div class="creativity-inner">
+    <div class="section-eyebrow">🎨 Squad Creativity</div>
+    <div class="section-title" style="font-family:'Lora',serif;font-size:2rem;color:var(--forest);margin-bottom:0.4rem;">Meme Wall</div>
+    <p class="section-sub">Upload funny pics, memes, or hype photos for the crew.</p>
+    <div class="upload-zone" id="upload-zone" onclick="document.getElementById('file-input').click()">
+      <div class="upload-zone-icon">📸</div>
+      <div class="upload-zone-text">Drop a pic or <strong>click to upload</strong></div>
+    </div>
+    <input type="file" id="file-input" accept="image/*" multiple hidden onchange="handleUpload(event)">
+    <div class="gallery-grid" id="creativity-gallery"></div>
+  </div>
+</div>
+
 <!-- ═══════════════════════════ LISTINGS ═══════════════════════════ -->
 <div class="section" id="listings">
   <div class="section-eyebrow">🏕️ The Contenders</div>
   <div class="section-title" id="listings-title">10 Listings. One Winner.</div>
   <p class="section-sub" id="listings-sub">Vote, react, compare — find your vibe.</p>
   <div class="listings-grid" id="listings-grid"></div>
+</div>
+
+<!-- ═══════════════════════════ CALENDAR ═══════════════════════════ -->
+<div class="calendar-wrap">
+  <div class="calendar-inner">
+    <div class="section-eyebrow">📅 When Are You Free?</div>
+    <div class="section-title" style="font-family:'Lora',serif;font-size:2rem;color:var(--forest);margin-bottom:0.4rem;">June 2026 Availability</div>
+    <p class="section-sub">Click the dates you're available, then hit Save. We'll find the overlap.</p>
+    <div class="cal-legend">
+      <div class="cal-legend-item">
+        <div class="cal-legend-swatch" style="background:var(--lake);border-color:var(--lake);"></div>
+        Target dates (June 11–14)
+      </div>
+      <div class="cal-legend-item">
+        <div class="cal-legend-swatch" style="background:var(--forest);border-color:var(--forest);"></div>
+        Your selection
+      </div>
+      <div class="cal-legend-item">
+        <div class="cal-legend-swatch" style="background:linear-gradient(135deg,var(--lake),var(--forest));border-color:var(--forest);"></div>
+        Overlap
+      </div>
+    </div>
+    <div class="cal-grid" id="cal-grid"></div>
+    <div class="cal-actions">
+      <button class="cal-done-btn" id="cal-done-btn" onclick="saveAvailability()">Save My Dates</button>
+      <span class="cal-summary" id="cal-summary"></span>
+    </div>
+    <div class="cal-names-row" id="cal-best" style="display:none;margin-top:1.2rem;">
+      <div class="cal-best-label">Best Overlap</div>
+      <div class="cal-best-dates" id="cal-best-dates"></div>
+      <div class="cal-who" id="cal-best-who"></div>
+    </div>
+  </div>
 </div>
 
 <!-- ═══════════════════════════ LEADERBOARD ═══════════════════════════ -->
@@ -1476,9 +1986,32 @@ footer strong { color: var(--gold); }
   </div>
 </div>
 
+<!-- ═══════════════════════════ WEATHER ═══════════════════════════ -->
+<div class="weather-wrap">
+  <div class="weather-inner">
+    <div class="section-eyebrow">🌤️ Weather Intel</div>
+    <div class="section-title" style="font-family:'Lora',serif;font-size:2rem;color:var(--forest);margin-bottom:0.4rem;">What to Expect in June</div>
+    <p class="section-sub">Projected weather for trip dates based on 3-year historical averages. Click an area for the daily breakdown.</p>
+    <div class="weather-grid" id="weather-grid">
+      <div class="weather-loading">Loading weather data...</div>
+    </div>
+  </div>
+</div>
+
 <footer>
   Built for the <strong>Summer 2026</strong> Squad Trip · Ontario Cottage Country
 </footer>
+
+<!-- ═══════════════════════════ WEATHER DETAIL MODAL ═══════════════════════════ -->
+<div class="weather-modal" id="weather-modal" onclick="if(event.target===this)closeWeatherModal()">
+  <div class="weather-modal-inner">
+    <div class="weather-modal-header">
+      <h2 id="weather-modal-title">Weather Detail</h2>
+      <button class="modal-close-btn" onclick="closeWeatherModal()">✕</button>
+    </div>
+    <div class="weather-modal-body" id="weather-modal-body"></div>
+  </div>
+</div>
 
 <!-- ═══════════════════════════ LIGHTBOX ═══════════════════════════ -->
 <div class="lightbox" id="lightbox">
@@ -1869,7 +2402,7 @@ if (visitorName) {
 }
 
 // ═══════════════════════════ STATE ═══════════════════════════
-const groupSize = 10;
+let groupSize = 10;
 let sortMode = 'default';
 let compareMode = false;
 let compareSelected = [];
@@ -1924,7 +2457,7 @@ function setupFirebaseListeners() {
         if (vid === visitorId) myVote[lid] = dir;
       });
     });
-    render();
+    debouncedRender();
   });
 
   // Reactions listener
@@ -1947,7 +2480,7 @@ function setupFirebaseListeners() {
         reactions[lid][emoji] = count;
       });
     });
-    render();
+    debouncedRender();
   });
 
   // Comments listener
@@ -1958,7 +2491,7 @@ function setupFirebaseListeners() {
       if (!comments.hasOwnProperty(lid)) { comments[lid] = []; }
       comments[lid] = Object.values(msgs || {}).map(m => `${m.name}: ${m.text}`);
     });
-    render();
+    debouncedRender();
   });
 
   // User-added listings listener
@@ -1970,7 +2503,7 @@ function setupFirebaseListeners() {
         initListingState(l);
       }
     });
-    render();
+    debouncedRender();
   });
 }
 
@@ -2168,7 +2701,15 @@ function renderCard(l, delay, rank) {
   </div>`;
 }
 
+// Debounced render for Firebase listeners
+let _renderTimer = null;
+function debouncedRender() {
+  clearTimeout(_renderTimer);
+  _renderTimer = setTimeout(render, 80);
+}
+
 function render() {
+  const scrollY = window.scrollY;
   const grid = document.getElementById('listings-grid');
   const sorted = sortedListings();
   const showRank = sortMode !== 'default';
@@ -2177,6 +2718,7 @@ function render() {
   // Update section header based on sort mode
   const titleEl = document.getElementById('listings-title');
   const subEl = document.getElementById('listings-sub');
+  const count = LISTINGS.length;
   if (sortMode === 'votes') {
     titleEl.textContent = '🏆 Ranked by Votes';
     subEl.textContent = 'Most popular picks at the top.';
@@ -2187,12 +2729,13 @@ function render() {
     titleEl.textContent = "⭐ Kai's Picks First";
     subEl.textContent = "Kai's top picks ranked first.";
   } else {
-    titleEl.textContent = '10 Listings. One Winner.';
+    titleEl.textContent = `${count} Listings. One Winner.`;
     subEl.textContent = 'Vote, react, compare — find your vibe.';
   }
 
   renderLeaderboard();
   updateComparePanelChips();
+  window.scrollTo(0, scrollY);
 }
 
 // ═══════════════════════════ LEADERBOARD ═══════════════════════════
@@ -2234,12 +2777,42 @@ function doVote(id, dir) {
     myVote[id] = dir;
     fbWrite(`votes/${id}/${visitorId}`, dir);
   }
-  render();
+  // Targeted update — no full re-render, no scroll jump
+  updateVoteUI(id);
+  renderLeaderboard();
+}
+function updateVoteUI(id) {
+  const card = document.getElementById(`card-${id}`);
+  if (!card) return;
+  const upBtn = card.querySelector('.vote-up');
+  const downBtn = card.querySelector('.vote-down');
+  if (upBtn) {
+    upBtn.classList.toggle('active', myVote[id] === 'up');
+    upBtn.querySelector('span').textContent = upvotes[id] || 0;
+  }
+  if (downBtn) {
+    downBtn.classList.toggle('active', myVote[id] === 'down');
+    downBtn.querySelector('span').textContent = downvotes[id] || 0;
+  }
+  // Update Squad Fave badge
+  const nv = (upvotes[id] || 0) - (downvotes[id] || 0);
+  const badges = card.querySelector('.card-badges');
+  if (!badges) return;
+  const existingFave = badges.querySelector('.badge-fave');
+  if (nv >= 4 && !existingFave) {
+    const fave = document.createElement('span');
+    fave.className = 'badge badge-fave';
+    fave.textContent = '🏆 Squad Fave';
+    badges.appendChild(fave);
+  } else if (nv < 4 && existingFave) {
+    existingFave.remove();
+  }
 }
 function toggleSaved(id, e) {
   e.stopPropagation();
   saved[id] = !saved[id];
-  render();
+  const btn = e.currentTarget;
+  btn.textContent = saved[id] ? '❤️' : '🤍';
 }
 function setPhoto(id, idx, e) {
   e && e.stopPropagation();
@@ -2319,7 +2892,7 @@ function closeLightbox() {
 function updateLb() {
   if (!lbCard) return;
   document.getElementById('lb-img').src = lbCard.photos[lbPhotoIdx];
-  document.getElementById('lb-caption').textContent = `${lbCard.title} · ${lbCard.area} · Photo ${lbPhotoIdx+1} of ${lbCard.photos.length}`;
+  document.getElementById('lb-caption').textContent = `${lbCard.title} · ${lbCard.area || ''} · Photo ${lbPhotoIdx+1} of ${lbCard.photos.length}`;
 }
 function lbNav(d) {
   lbPhotoIdx = (lbPhotoIdx+d+lbCard.photos.length) % lbCard.photos.length;
@@ -2408,6 +2981,8 @@ document.addEventListener('keydown', e => {
     if (e.key==='ArrowRight') lbNav(1);
     else if (e.key==='ArrowLeft') lbNav(-1);
     else if (e.key==='Escape') closeLightbox();
+  } else if (document.getElementById('weather-modal').classList.contains('open')) {
+    if (e.key==='Escape') closeWeatherModal();
   } else if (document.getElementById('compare-modal').classList.contains('open')) {
     if (e.key==='Escape') closeCompare();
   }
@@ -2515,6 +3090,505 @@ async function submitAddListing() {
     statusText.className = 'status-text error';
     statusText.textContent = 'Network error — is the server running?';
     setTimeout(() => form.classList.remove('loading'), 3000);
+  }
+}
+
+// ═══════════════════════════ CLEAR STALE DATA (one-time) ═══════════════════════════
+if (FB_READY && !localStorage.getItem('cottage_fresh_v1')) {
+  db.ref('votes').remove();
+  db.ref('reactions').remove();
+  db.ref('comments').remove();
+  localStorage.setItem('cottage_fresh_v1', 'true');
+}
+
+// ═══════════════════════════ CALENDAR (Range Picker) ═══════════════════════════
+const JUNE_DAYS = 30;
+const JUNE_START_DOW = 1; // June 1, 2026 = Monday (0=Sun)
+let rangeStart = null;
+let rangeEnd = null;
+let allAvailability = {};
+const TARGET_START = 11;
+const TARGET_END = 14;
+
+function getMyRange() {
+  if (rangeStart == null) return [];
+  const end = rangeEnd != null ? rangeEnd : rangeStart;
+  const dates = [];
+  for (let d = Math.min(rangeStart, end); d <= Math.max(rangeStart, end); d++) dates.push(d);
+  return dates;
+}
+
+// Build calendar once — then use applyCalClasses() for visual updates
+function buildCalendar() {
+  const grid = document.getElementById('cal-grid');
+  const dayNames = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+  let html = dayNames.map(d => `<div class="cal-header">${d}</div>`).join('');
+
+  for (let i = 0; i < JUNE_START_DOW; i++) {
+    html += '<div class="cal-day empty"></div>';
+  }
+
+  for (let d = 1; d <= JUNE_DAYS; d++) {
+    const who = allAvailability[d] ? Object.values(allAvailability[d]) : [];
+    const count = who.length;
+    const countHtml = count > 0 ? `<span class="cal-count">${count}</span>` : '';
+    html += `<div class="cal-day" data-day="${d}" title="${who.join(', ') || 'No one yet'}">${d}${countHtml}</div>`;
+  }
+
+  grid.innerHTML = html;
+
+  // Attach event listeners via delegation (no re-render on hover)
+  grid.onmousedown = null;
+  grid.onclick = function(e) {
+    const cell = e.target.closest('.cal-day[data-day]');
+    if (!cell) return;
+    pickDate(parseInt(cell.dataset.day));
+  };
+  grid.onmouseover = function(e) {
+    const cell = e.target.closest('.cal-day[data-day]');
+    if (!cell || rangeStart == null || rangeEnd != null) return;
+    applyHoverPreview(parseInt(cell.dataset.day));
+  };
+  grid.onmouseleave = function() {
+    if (rangeStart != null && rangeEnd == null) clearHoverPreview();
+  };
+
+  applyCalClasses();
+  updateCalSummary();
+}
+
+function applyCalClasses() {
+  const cells = document.querySelectorAll('.cal-day[data-day]');
+  const myRange = getMyRange();
+  const rStart = myRange.length ? myRange[0] : null;
+  const rEnd = myRange.length > 1 ? myRange[myRange.length - 1] : null;
+
+  cells.forEach(cell => {
+    const d = parseInt(cell.dataset.day);
+    cell.classList.remove('range-start', 'range-end', 'in-range', 'hover-preview', 'target-range', 'target-start', 'target-end');
+
+    // Target dates (June 11–14)
+    if (d === TARGET_START || d === TARGET_END) cell.classList.add('target-start');
+    else if (d > TARGET_START && d < TARGET_END) cell.classList.add('target-range');
+
+    // User's selected range
+    if (d === rStart) cell.classList.add('range-start');
+    else if (d === rEnd) cell.classList.add('range-end');
+    else if (rStart && rEnd && d > rStart && d < rEnd) cell.classList.add('in-range');
+  });
+}
+
+function applyHoverPreview(hoveredDay) {
+  const cells = document.querySelectorAll('.cal-day[data-day]');
+  const lo = Math.min(rangeStart, hoveredDay);
+  const hi = Math.max(rangeStart, hoveredDay);
+  cells.forEach(cell => {
+    const d = parseInt(cell.dataset.day);
+    cell.classList.remove('hover-preview', 'in-range', 'range-end');
+    if (d === rangeStart) { /* keep range-start */ }
+    else if (d >= lo && d <= hi) cell.classList.add('hover-preview');
+    else cell.classList.remove('hover-preview');
+  });
+}
+
+function clearHoverPreview() {
+  document.querySelectorAll('.cal-day.hover-preview').forEach(c => c.classList.remove('hover-preview'));
+}
+
+function pickDate(d) {
+  if (rangeStart == null) {
+    rangeStart = d;
+    rangeEnd = null;
+  } else if (rangeEnd == null) {
+    if (d === rangeStart) return;
+    rangeEnd = Math.max(rangeStart, d);
+    rangeStart = Math.min(rangeStart, d);
+  } else {
+    rangeStart = d;
+    rangeEnd = null;
+  }
+  applyCalClasses();
+  updateCalSummary();
+}
+
+function saveAvailability() {
+  if (!visitorName) {
+    document.getElementById('name-overlay').classList.remove('hidden');
+    return;
+  }
+  const dates = getMyRange();
+  if (dates.length === 0) return;
+  fbWrite(`availability/${visitorId}`, { name: visitorName, dates });
+  const btn = document.getElementById('cal-done-btn');
+  btn.textContent = '✓ Saved!';
+  btn.classList.add('saved');
+  setTimeout(() => { btn.textContent = 'Save My Dates'; btn.classList.remove('saved'); }, 2000);
+}
+
+function updateCalSummary() {
+  const summary = document.getElementById('cal-summary');
+  const bestEl = document.getElementById('cal-best');
+  const myRange = getMyRange();
+
+  if (myRange.length > 1) {
+    summary.textContent = `June ${myRange[0]}–${myRange[myRange.length-1]} (${myRange.length} nights)`;
+  } else if (myRange.length === 1) {
+    summary.textContent = `June ${myRange[0]} selected`;
+  } else {
+    summary.textContent = '';
+  }
+
+  // Find best overlap
+  let bestCount = 0;
+  let bestDays = [];
+  for (let d = 1; d <= JUNE_DAYS; d++) {
+    const who = allAvailability[d] ? Object.keys(allAvailability[d]).length : 0;
+    if (who > bestCount) { bestCount = who; bestDays = [d]; }
+    else if (who === bestCount && who > 0) bestDays.push(d);
+  }
+
+  if (bestCount >= 2 && bestDays.length > 0) {
+    bestEl.style.display = 'block';
+    const ranges = [];
+    let s = bestDays[0], e = bestDays[0];
+    for (let i = 1; i < bestDays.length; i++) {
+      if (bestDays[i] === e + 1) { e = bestDays[i]; }
+      else { ranges.push(s === e ? `June ${s}` : `June ${s}–${e}`); s = e = bestDays[i]; }
+    }
+    ranges.push(s === e ? `June ${s}` : `June ${s}–${e}`);
+    document.getElementById('cal-best-dates').textContent = ranges.join(', ');
+    const names = allAvailability[bestDays[0]] ? Object.values(allAvailability[bestDays[0]]).join(', ') : '';
+    document.getElementById('cal-best-who').textContent = `${bestCount} people available: ${names}`;
+  } else {
+    bestEl.style.display = 'none';
+  }
+}
+
+// Firebase listener for availability
+if (FB_READY) {
+  db.ref('availability').on('value', snap => {
+    const data = snap.val() || {};
+    allAvailability = {};
+    Object.entries(data).forEach(([vid, info]) => {
+      (info.dates || []).forEach(d => {
+        if (!allAvailability[d]) allAvailability[d] = {};
+        allAvailability[d][vid] = info.name;
+      });
+      if (vid === visitorId && info.dates && info.dates.length) {
+        rangeStart = Math.min(...info.dates);
+        rangeEnd = Math.max(...info.dates);
+        if (rangeStart === rangeEnd) rangeEnd = null;
+      }
+    });
+    buildCalendar();
+  });
+}
+buildCalendar();
+
+// ═══════════════════════════ CREATIVITY GALLERY ═══════════════════════════
+let galleryImages = [];
+
+// Drag and drop support
+const uploadZone = document.getElementById('upload-zone');
+uploadZone.addEventListener('dragover', e => { e.preventDefault(); uploadZone.classList.add('dragover'); });
+uploadZone.addEventListener('dragleave', () => uploadZone.classList.remove('dragover'));
+uploadZone.addEventListener('drop', e => {
+  e.preventDefault();
+  uploadZone.classList.remove('dragover');
+  const files = Array.from(e.dataTransfer.files).filter(f => f.type.startsWith('image/'));
+  if (files.length) processFiles(files);
+});
+
+function handleUpload(e) {
+  const files = Array.from(e.target.files);
+  processFiles(files);
+  e.target.value = '';
+}
+
+function processFiles(files) {
+  if (!visitorName) {
+    document.getElementById('name-overlay').classList.remove('hidden');
+    return;
+  }
+  files.forEach(file => {
+    if (!file.type.startsWith('image/')) return;
+    const reader = new FileReader();
+    reader.onload = (evt) => {
+      const img = new Image();
+      img.onload = () => {
+        const canvas = document.createElement('canvas');
+        const maxW = 600;
+        let w = img.width, h = img.height;
+        if (w > maxW) { h = h * maxW / w; w = maxW; }
+        canvas.width = w;
+        canvas.height = h;
+        canvas.getContext('2d').drawImage(img, 0, 0, w, h);
+        const dataUrl = canvas.toDataURL('image/jpeg', 0.65);
+        const entry = { data: dataUrl, name: visitorName, time: Date.now() };
+        if (FB_READY) {
+          db.ref('gallery').push(entry);
+        } else {
+          galleryImages.push(entry);
+          renderGallery();
+        }
+      };
+      img.src = evt.target.result;
+    };
+    reader.readAsDataURL(file);
+  });
+}
+
+function renderGallery() {
+  const container = document.getElementById('creativity-gallery');
+  if (galleryImages.length === 0) {
+    container.innerHTML = '<div class="gallery-empty">No pics yet — be the first to upload! 📸</div>';
+    return;
+  }
+  container.innerHTML = galleryImages.map((img, i) => {
+    const date = new Date(img.time);
+    const time = `${date.getMonth()+1}/${date.getDate()}`;
+    return `<div class="gallery-item" onclick="openGalleryLightbox(${i})">
+      <img src="${img.data}" alt="Upload by ${img.name}" loading="lazy">
+      <div class="gallery-item-footer">
+        <span class="gallery-item-name">📸 ${img.name}</span>
+        <span class="gallery-item-time">${time}</span>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function openGalleryLightbox(idx) {
+  const img = galleryImages[idx];
+  if (!img) return;
+  lbCard = { photos: galleryImages.map(g => g.data), title: img.name + "'s upload", area: 'Squad Creativity' };
+  lbPhotoIdx = idx;
+  updateLb();
+  document.getElementById('lightbox').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+// Firebase listener for gallery
+if (FB_READY) {
+  db.ref('gallery').on('value', snap => {
+    const data = snap.val() || {};
+    galleryImages = Object.values(data).sort((a,b) => b.time - a.time);
+    renderGallery();
+  });
+}
+renderGallery();
+
+// ═══════════════════════════ WEATHER ═══════════════════════════
+const WEATHER_AREAS = [
+  { name: 'Grand Bend', lat: 43.31, lon: -81.76 },
+  { name: 'Sauble Beach', lat: 44.63, lon: -81.27 },
+  { name: 'Collingwood', lat: 44.50, lon: -80.22 },
+  { name: 'Muskoka', lat: 44.92, lon: -79.37 },
+  { name: 'Wasaga Beach', lat: 44.52, lon: -80.02 },
+  { name: 'Kawarthas', lat: 44.53, lon: -78.74 },
+];
+
+const WMO_CODES = {
+  0:'Clear sky', 1:'Mainly clear', 2:'Partly cloudy', 3:'Overcast',
+  45:'Foggy', 48:'Rime fog', 51:'Light drizzle', 53:'Drizzle', 55:'Heavy drizzle',
+  61:'Light rain', 63:'Rain', 65:'Heavy rain', 71:'Light snow', 73:'Snow', 75:'Heavy snow',
+  80:'Light showers', 81:'Showers', 82:'Heavy showers', 95:'Thunderstorm',
+};
+const WMO_ICONS = {
+  0:'☀️', 1:'🌤️', 2:'⛅', 3:'☁️',
+  45:'🌫️', 48:'🌫️', 51:'🌦️', 53:'🌧️', 55:'🌧️',
+  61:'🌦️', 63:'🌧️', 65:'🌧️', 71:'🌨️', 73:'🌨️', 75:'❄️',
+  80:'🌦️', 81:'🌧️', 82:'⛈️', 95:'⛈️',
+};
+
+async function loadWeather() {
+  const grid = document.getElementById('weather-grid');
+  try {
+    const promises = WEATHER_AREAS.map(async (area) => {
+      // Historical June 11-14 from past 3 years
+      const years = [2023, 2024, 2025];
+      const histPromises = years.map(y =>
+        fetch(`https://archive-api.open-meteo.com/v1/archive?latitude=${area.lat}&longitude=${area.lon}&start_date=${y}-06-11&end_date=${y}-06-14&daily=temperature_2m_max,temperature_2m_min,precipitation_sum,weather_code&timezone=America/Toronto`)
+          .then(r => r.json()).catch(() => null)
+      );
+      const histResults = await Promise.all(histPromises);
+
+      // Average across years for each trip day
+      const tripDays = [11, 12, 13, 14];
+      let allHighs = [], allLows = [], rainCount = 0, totalCount = 0;
+      const dayProjections = tripDays.map(day => {
+        let highs = [], lows = [], codes = [];
+        histResults.forEach(h => {
+          if (!h || !h.daily || !h.daily.time) return;
+          const di = h.daily.time.findIndex(t => t.endsWith(`-06-${String(day).padStart(2,'0')}`));
+          if (di === -1) return;
+          if (h.daily.temperature_2m_max[di] != null) { highs.push(h.daily.temperature_2m_max[di]); allHighs.push(h.daily.temperature_2m_max[di]); }
+          if (h.daily.temperature_2m_min[di] != null) { lows.push(h.daily.temperature_2m_min[di]); allLows.push(h.daily.temperature_2m_min[di]); }
+          if (h.daily.weather_code[di] != null) codes.push(h.daily.weather_code[di]);
+          if (h.daily.precipitation_sum[di] != null) { totalCount++; if (h.daily.precipitation_sum[di] > 0.5) rainCount++; }
+        });
+        const avgHi = highs.length ? Math.round(highs.reduce((a,b)=>a+b,0)/highs.length) : '—';
+        const avgLo = lows.length ? Math.round(lows.reduce((a,b)=>a+b,0)/lows.length) : '—';
+        const modeCode = codes.length ? codes.sort((a,b) => codes.filter(v=>v===a).length - codes.filter(v=>v===b).length).pop() : 1;
+        return { day, avgHi, avgLo, modeCode };
+      });
+
+      const avgHigh = allHighs.length ? Math.round(allHighs.reduce((a,b)=>a+b,0)/allHighs.length) : '—';
+      const avgLow = allLows.length ? Math.round(allLows.reduce((a,b)=>a+b,0)/allLows.length) : '—';
+      const rainPct = totalCount ? Math.round((rainCount/totalCount)*100) : 0;
+      // Most common code across trip
+      const overallCode = dayProjections.map(d=>d.modeCode).sort((a,b) =>
+        dayProjections.filter(d=>d.modeCode===a).length - dayProjections.filter(d=>d.modeCode===b).length
+      ).pop() || 1;
+
+      return { area, avgHigh, avgLow, rainPct, overallCode, dayProjections };
+    });
+
+    const results = await Promise.all(promises);
+
+    grid.innerHTML = results.map(({ area, avgHigh, avgLow, rainPct, overallCode }, i) => {
+      const icon = WMO_ICONS[overallCode] || '🌤️';
+      const desc = WMO_CODES[overallCode] || 'Mostly clear';
+      return `<div class="weather-card" onclick="openWeatherDetail(${i})">
+        <div class="weather-card-header">
+          <span class="weather-card-area">${area.name}</span>
+          <span class="weather-card-now">June 11–14</span>
+        </div>
+        <div class="weather-current">
+          <span class="weather-icon">${icon}</span>
+          <div>
+            <div class="weather-temp-now">${avgHigh}°</div>
+            <div class="weather-desc">${desc}</div>
+            <div class="weather-wind">Low ${avgLow}° · 💧 ${rainPct}% rain chance</div>
+          </div>
+        </div>
+        <div class="weather-june-title">🎯 Trip Date Projection</div>
+        <div class="weather-june-stats">
+          <div class="weather-stat">
+            <div class="weather-stat-label">Avg High</div>
+            <div class="weather-stat-value">${avgHigh}° <span class="unit">C</span></div>
+          </div>
+          <div class="weather-stat">
+            <div class="weather-stat-label">Avg Low</div>
+            <div class="weather-stat-value">${avgLow}° <span class="unit">C</span></div>
+          </div>
+          <div class="weather-stat">
+            <div class="weather-stat-label">Rain Risk</div>
+            <div class="weather-stat-value">${rainPct}<span class="unit">%</span></div>
+          </div>
+          <div class="weather-stat">
+            <div class="weather-stat-label">Outlook</div>
+            <div class="weather-stat-value">${icon}</div>
+          </div>
+        </div>
+        <div class="weather-card-hint">Tap for daily breakdown →</div>
+      </div>`;
+    }).join('');
+
+  } catch (err) {
+    grid.innerHTML = '<div class="weather-loading">Could not load weather data. Try refreshing.</div>';
+  }
+}
+loadWeather();
+
+const DAY_NAMES = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+const MONTH_NAMES = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+
+function closeWeatherModal() {
+  document.getElementById('weather-modal').classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+async function openWeatherDetail(areaIdx) {
+  const area = WEATHER_AREAS[areaIdx];
+  const modal = document.getElementById('weather-modal');
+  const body = document.getElementById('weather-modal-body');
+  document.getElementById('weather-modal-title').textContent = `${area.name} — June 11–14 Projection`;
+  body.innerHTML = '<div class="weather-loading">Loading projections...</div>';
+  modal.classList.add('open');
+  document.body.style.overflow = 'hidden';
+
+  try {
+    // Fetch historical data for June 11-14 from past 3 years
+    const years = [2023, 2024, 2025];
+    const histPromises = years.map(y =>
+      fetch(`https://archive-api.open-meteo.com/v1/archive?latitude=${area.lat}&longitude=${area.lon}&start_date=${y}-06-11&end_date=${y}-06-14&daily=temperature_2m_max,temperature_2m_min,precipitation_sum,weather_code&timezone=America/Toronto`)
+        .then(r => r.json()).catch(() => null)
+    );
+    const histResults = await Promise.all(histPromises);
+
+    const tripDays = [11, 12, 13, 14];
+    const tripProjections = tripDays.map(day => {
+      let highs = [], lows = [], codes = [], precips = [];
+      histResults.forEach(h => {
+        if (!h || !h.daily || !h.daily.time) return;
+        const di = h.daily.time.findIndex(t => t.endsWith(`-06-${String(day).padStart(2,'0')}`));
+        if (di === -1) return;
+        if (h.daily.temperature_2m_max[di] != null) highs.push(h.daily.temperature_2m_max[di]);
+        if (h.daily.temperature_2m_min[di] != null) lows.push(h.daily.temperature_2m_min[di]);
+        if (h.daily.weather_code[di] != null) codes.push(h.daily.weather_code[di]);
+        if (h.daily.precipitation_sum[di] != null) precips.push(h.daily.precipitation_sum[di]);
+      });
+      const avgHi = highs.length ? Math.round(highs.reduce((a,b)=>a+b,0)/highs.length) : '—';
+      const avgLo = lows.length ? Math.round(lows.reduce((a,b)=>a+b,0)/lows.length) : '—';
+      const modeCode = codes.length ? codes.sort((a,b) => codes.filter(v=>v===a).length - codes.filter(v=>v===b).length).pop() : 1;
+      const rainChance = precips.length ? Math.round((precips.filter(p => p > 0.5).length / precips.length) * 100) : 0;
+      const date = new Date(2026, 5, day);
+      return { day, dayName: DAY_NAMES[date.getDay()], avgHi, avgLo, modeCode, rainChance };
+    });
+
+    let html = `<div class="weather-detail-section">
+      <div class="weather-detail-label">🎯 Day-by-Day Projection <span class="badge-projected">Based on 2023–2025 actuals</span></div>
+      <div class="weather-days">`;
+    tripProjections.forEach(tp => {
+      const icon = WMO_ICONS[tp.modeCode] || '🌤️';
+      const desc = WMO_CODES[tp.modeCode] || '';
+      html += `<div class="weather-day-row trip-day">
+        <span class="weather-day-name">${tp.dayName}</span>
+        <span class="weather-day-date">Jun ${tp.day}</span>
+        <span class="weather-day-icon">${icon}</span>
+        <span class="weather-day-desc">${desc}</span>
+        <span class="weather-day-temps"><span class="weather-day-hi">${tp.avgHi}°</span><span class="weather-day-lo">${tp.avgLo}°</span></span>
+        <span class="weather-day-precip">💧 ${tp.rainChance}%</span>
+      </div>`;
+    });
+    html += '</div></div>';
+
+    // Show what each year actually looked like
+    html += `<div class="weather-detail-section">
+      <div class="weather-detail-label">📊 What Those Dates Actually Looked Like</div>
+      <div class="weather-days">`;
+    years.forEach(y => {
+      const h = histResults[years.indexOf(y)];
+      if (!h || !h.daily) return;
+      h.daily.time.forEach((t, i) => {
+        const day = parseInt(t.split('-')[2]);
+        const date = new Date(t + 'T12:00:00');
+        const hi = h.daily.temperature_2m_max[i] != null ? Math.round(h.daily.temperature_2m_max[i]) : '—';
+        const lo = h.daily.temperature_2m_min[i] != null ? Math.round(h.daily.temperature_2m_min[i]) : '—';
+        const code = h.daily.weather_code[i] || 0;
+        const icon = WMO_ICONS[code] || '🌤️';
+        const desc = WMO_CODES[code] || '';
+        const precip = h.daily.precipitation_sum[i] != null ? h.daily.precipitation_sum[i].toFixed(1) : '0';
+        html += `<div class="weather-day-row">
+          <span class="weather-day-name" style="color:var(--text-soft)">${y}</span>
+          <span class="weather-day-date">Jun ${day}</span>
+          <span class="weather-day-icon">${icon}</span>
+          <span class="weather-day-desc">${desc}</span>
+          <span class="weather-day-temps"><span class="weather-day-hi">${hi}°</span><span class="weather-day-lo">${lo}°</span></span>
+          <span class="weather-day-precip">💧 ${precip}mm</span>
+        </div>`;
+      });
+    });
+    html += '</div></div>';
+
+    html += `<div class="weather-note">
+      Projections are averaged from actual recorded weather on June 11–14 in 2023, 2024, and 2025 at this location. Not a forecast — the best historical estimate we have.
+    </div>`;
+
+    body.innerHTML = html;
+
+  } catch (err) {
+    body.innerHTML = '<div class="weather-loading">Could not load projections. Try again.</div>';
   }
 }
 

@@ -1350,6 +1350,207 @@ body {
 }
 .name-box button:hover { background: var(--rust-light); }
 
+/* ═══════════════════════════ SQUAD BAR ═══════════════════════════ */
+.squad-bar {
+  background: var(--forest);
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+  padding: 0.6rem 1.5rem;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+.squad-bar::-webkit-scrollbar { display: none; }
+.squad-bar-label {
+  font-size: 0.62rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgba(250,245,236,0.35);
+  white-space: nowrap;
+}
+.squad-member {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 100px;
+  padding: 4px 12px 4px 6px;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+.squad-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.2);
+  flex-shrink: 0;
+}
+.squad-dot.online { background: #4ade80; box-shadow: 0 0 6px rgba(74,222,128,0.5); }
+.squad-name {
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: rgba(250,245,236,0.7);
+}
+.squad-name.is-you { color: var(--gold-light); }
+
+/* ═══════════════════════════ TRIP JOURNAL ═══════════════════════════ */
+.journal-wrap {
+  background: var(--parchment);
+  padding: 4rem 0;
+}
+.journal-inner {
+  max-width: 700px;
+  margin: 0 auto;
+  padding: 0 1.5rem;
+}
+.journal-compose {
+  background: var(--card-bg);
+  border-radius: 18px;
+  border: 1px solid var(--sand);
+  padding: 1.25rem;
+  margin-bottom: 2rem;
+}
+.journal-compose textarea {
+  width: 100%;
+  border: none;
+  outline: none;
+  resize: none;
+  font-family: 'Nunito', sans-serif;
+  font-size: 0.9rem;
+  color: var(--text);
+  background: none;
+  min-height: 60px;
+  margin-bottom: 0.75rem;
+}
+.journal-compose textarea::placeholder { color: var(--text-soft); opacity: 0.6; }
+.journal-compose-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.journal-attach-btn {
+  background: none;
+  border: 1px solid var(--sand);
+  border-radius: 100px;
+  padding: 5px 12px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: var(--text-soft);
+  cursor: pointer;
+  font-family: 'Nunito', sans-serif;
+  transition: all 0.2s;
+}
+.journal-attach-btn:hover { border-color: var(--bark-light); color: var(--bark); }
+.journal-post-btn {
+  margin-left: auto;
+  background: var(--rust);
+  color: white;
+  border: none;
+  border-radius: 100px;
+  padding: 7px 20px;
+  font-size: 0.78rem;
+  font-weight: 700;
+  cursor: pointer;
+  font-family: 'Nunito', sans-serif;
+  transition: background 0.2s;
+}
+.journal-post-btn:hover { background: var(--rust-light); }
+.journal-preview {
+  margin-top: 0.6rem;
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+.journal-preview img {
+  width: 60px;
+  height: 60px;
+  object-fit: cover;
+  border-radius: 8px;
+  border: 2px solid var(--sand);
+}
+.journal-preview .video-preview {
+  background: var(--parchment);
+  border: 2px solid var(--sand);
+  border-radius: 8px;
+  padding: 4px 10px;
+  font-size: 0.65rem;
+  color: var(--text-soft);
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+.journal-feed {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+.journal-post {
+  background: var(--card-bg);
+  border-radius: 18px;
+  border: 1px solid var(--sand);
+  overflow: hidden;
+}
+.journal-post-header {
+  padding: 1rem 1.25rem 0;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.journal-post-avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: var(--forest);
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.75rem;
+  font-weight: 800;
+  flex-shrink: 0;
+}
+.journal-post-meta { flex: 1; }
+.journal-post-author { font-weight: 700; font-size: 0.82rem; color: var(--charcoal); }
+.journal-post-time { font-size: 0.65rem; color: var(--text-soft); }
+.journal-post-body {
+  padding: 0.75rem 1.25rem;
+  font-size: 0.88rem;
+  line-height: 1.55;
+  color: var(--text);
+}
+.journal-post-media {
+  padding: 0 1.25rem 1rem;
+}
+.journal-post-media img {
+  width: 100%;
+  border-radius: 12px;
+  max-height: 400px;
+  object-fit: cover;
+  cursor: pointer;
+}
+.journal-post-media iframe {
+  width: 100%;
+  aspect-ratio: 16/9;
+  border: none;
+  border-radius: 12px;
+}
+.journal-post-images {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 6px;
+}
+.journal-post-images img { height: 180px; }
+.journal-empty {
+  text-align: center;
+  padding: 2rem;
+  color: var(--text-soft);
+  font-size: 0.85rem;
+}
+
 /* ═══════════════════════════ FOOTER ═══════════════════════════ */
 footer {
   background: #1a2218;
@@ -1503,6 +1704,21 @@ footer strong { color: var(--gold); }
   .name-box h2 { font-size: 1.3rem; }
   .name-box input { padding: 12px 14px; font-size: 0.9rem; }
 
+  /* Squad Bar */
+  .squad-bar { padding: 0.5rem 1rem; gap: 0.5rem; }
+  .squad-member { padding: 3px 9px 3px 5px; }
+  .squad-name { font-size: 0.65rem; }
+
+  /* Journal */
+  .journal-wrap { padding: 2.5rem 0; }
+  .journal-inner { padding: 0 1rem; }
+  .journal-compose { padding: 1rem; }
+  .journal-post-body { font-size: 0.82rem; padding: 0.6rem 1rem; }
+  .journal-post-header { padding: 0.8rem 1rem 0; }
+  .journal-post-media { padding: 0 1rem 0.8rem; }
+  .journal-post-images { grid-template-columns: 1fr 1fr; }
+  .journal-post-images img { height: 140px; }
+
   /* Footer */
   footer { padding: 1.5rem 1rem; font-size: 0.65rem; }
 }
@@ -1563,14 +1779,14 @@ footer strong { color: var(--gold); }
 }
 .cal-day:hover { border-color: var(--forest-light); transform: scale(1.05); }
 .cal-day.selected { background: var(--forest); color: white; border-color: var(--forest); }
-.cal-day.range-start, .cal-day.range-end { background: var(--forest); color: white; border-color: var(--forest); font-weight: 800; }
-.cal-day.in-range { background: rgba(44,74,52,0.18); color: var(--forest); border-color: rgba(44,74,52,0.3); }
-.cal-day.hover-preview { background: rgba(44,74,52,0.1); border-color: rgba(44,74,52,0.2); transition: background 0.1s; }
+.cal-day.range-start, .cal-day.range-end { background: var(--rust); color: white; border-color: var(--rust); font-weight: 800; }
+.cal-day.in-range { background: rgba(181,73,30,0.15); color: var(--rust); border-color: rgba(181,73,30,0.25); }
+.cal-day.hover-preview { background: rgba(181,73,30,0.08); border-color: rgba(181,73,30,0.2); transition: background 0.1s; }
 .cal-day.target-range { background: rgba(74,127,160,0.18); border-color: var(--lake); color: var(--lake); }
 .cal-day.target-start, .cal-day.target-end { background: var(--lake); color: white; border-color: var(--lake); font-weight: 800; }
 .cal-day.target-range.range-start, .cal-day.target-start.range-start,
 .cal-day.target-range.range-end, .cal-day.target-end.range-end,
-.cal-day.target-range.in-range { background: linear-gradient(135deg, var(--lake), var(--forest)); color: white; border-color: var(--forest); }
+.cal-day.target-range.in-range { background: linear-gradient(135deg, var(--rust), var(--lake)); color: white; border-color: var(--rust); }
 .cal-day.empty { background: none; cursor: default; pointer-events: none; }
 .cal-day .cal-count {
   font-size: 0.55rem;
@@ -1996,7 +2212,7 @@ footer strong { color: var(--gold); }
     <div class="hero-pills">
       <span class="hero-pill">👥 ~10 people</span>
       <span class="hero-pill">🏕️ Ontario Cottage Country</span>
-      <span class="hero-pill">🚗 From Toronto</span>
+      <span class="hero-pill">🚗 From Dundas, ON</span>
     </div>
     <a class="hero-cta" href="#listings">Pick Our Cottage ↓</a>
   </div>
@@ -2025,6 +2241,11 @@ footer strong { color: var(--gold); }
   <button class="add-listing-btn" onclick="openAddModal()">+ Add Listing</button>
 </div>
 
+<!-- ═══════════════════════════ SQUAD BAR ═══════════════════════════ -->
+<div class="squad-bar" id="squad-bar">
+  <span class="squad-bar-label">Squad</span>
+</div>
+
 <!-- ═══════════════════════════ MEME WALL ═══════════════════════════ -->
 <div class="creativity-wrap">
   <div class="creativity-inner">
@@ -2051,21 +2272,21 @@ footer strong { color: var(--gold); }
 <!-- ═══════════════════════════ CALENDAR ═══════════════════════════ -->
 <div class="calendar-wrap">
   <div class="calendar-inner">
-    <div class="section-eyebrow">📅 When Are You Free?</div>
-    <div class="section-title" style="font-family:'Lora',serif;font-size:2rem;color:var(--forest);margin-bottom:0.4rem;">June 2026 Availability</div>
-    <p class="section-sub">Click the dates you're available, then hit Save. We'll find the overlap.</p>
+    <div class="section-eyebrow">📅 When Can't You Make It?</div>
+    <div class="section-title" style="font-family:'Lora',serif;font-size:2rem;color:var(--forest);margin-bottom:0.4rem;">June 2026 — Mark Your Blackout Dates</div>
+    <p class="section-sub">Click the dates you're <strong>unavailable</strong>, then hit Save. We'll find when everyone's free.</p>
     <div class="cal-legend">
       <div class="cal-legend-item">
         <div class="cal-legend-swatch" style="background:var(--lake);border-color:var(--lake);"></div>
         Target dates (June 11–14)
       </div>
       <div class="cal-legend-item">
-        <div class="cal-legend-swatch" style="background:var(--forest);border-color:var(--forest);"></div>
-        Your selection
+        <div class="cal-legend-swatch" style="background:var(--rust);border-color:var(--rust);"></div>
+        Your unavailable dates
       </div>
       <div class="cal-legend-item">
-        <div class="cal-legend-swatch" style="background:linear-gradient(135deg,var(--lake),var(--forest));border-color:var(--forest);"></div>
-        Overlap
+        <div class="cal-legend-swatch" style="background:var(--card-bg);border-color:var(--sand);"></div>
+        You're free
       </div>
     </div>
     <div class="cal-grid" id="cal-grid"></div>
@@ -2074,7 +2295,7 @@ footer strong { color: var(--gold); }
       <span class="cal-summary" id="cal-summary"></span>
     </div>
     <div class="cal-names-row" id="cal-best" style="display:none;margin-top:1.2rem;">
-      <div class="cal-best-label">Best Overlap</div>
+      <div class="cal-best-label">Best Dates (Fewest Conflicts)</div>
       <div class="cal-best-dates" id="cal-best-dates"></div>
       <div class="cal-who" id="cal-best-who"></div>
     </div>
@@ -2095,7 +2316,7 @@ footer strong { color: var(--gold); }
   <div class="map-container">
     <div class="section-eyebrow">📍 Where They Are</div>
     <div class="section-title">Ontario Cottage Corridor</div>
-    <p class="section-sub">All within ~2.5hrs of Toronto. Hover the pins for drive times.</p>
+    <p class="section-sub">All within ~2.5hrs of Dundas, ON. Hover the pins for drive times.</p>
 
     <div class="map-canvas-wrap" id="map-wrap">
       <svg class="map-svg" viewBox="0 0 800 400" id="map-svg">
@@ -2128,10 +2349,30 @@ footer strong { color: var(--gold); }
     </div>
 
     <div class="drive-legend" id="drive-legend">
-      <div class="drive-item"><div class="drive-dot" style="background:var(--forest)"></div> Under 2hr from Toronto</div>
-      <div class="drive-item"><div class="drive-dot" style="background:var(--gold)"></div> 2–2.5hr from Toronto</div>
-      <div class="drive-item"><div class="drive-dot" style="background:var(--rust)"></div> 2.5–3hr from Toronto</div>
+      <div class="drive-item"><div class="drive-dot" style="background:var(--forest)"></div> Under 2hr from Dundas</div>
+      <div class="drive-item"><div class="drive-dot" style="background:var(--gold)"></div> 2–2.5hr from Dundas</div>
+      <div class="drive-item"><div class="drive-dot" style="background:var(--rust)"></div> 2.5–3hr from Dundas</div>
     </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════ TRIP JOURNAL ═══════════════════════════ -->
+<div class="journal-wrap">
+  <div class="journal-inner">
+    <div class="section-eyebrow">📖 Trip Journal</div>
+    <div class="section-title" style="font-family:'Lora',serif;font-size:2rem;color:var(--forest);margin-bottom:0.4rem;">Squad Stories</div>
+    <p class="section-sub">Post moments, funny stories, photos, or videos from the trip.</p>
+    <div class="journal-compose">
+      <textarea id="journal-text" placeholder="What's happening? Share a moment..."></textarea>
+      <div class="journal-preview" id="journal-preview"></div>
+      <div class="journal-compose-actions">
+        <button class="journal-attach-btn" onclick="document.getElementById('journal-photo-input').click()">📷 Photo</button>
+        <button class="journal-attach-btn" onclick="promptVideoUrl()">🎬 Video Link</button>
+        <input type="file" id="journal-photo-input" accept="image/*" multiple hidden onchange="handleJournalPhotos(event)">
+        <button class="journal-post-btn" onclick="submitJournalPost()">Post</button>
+      </div>
+    </div>
+    <div class="journal-feed" id="journal-feed"></div>
   </div>
 </div>
 
@@ -2206,8 +2447,9 @@ footer strong { color: var(--gold); }
 <div class="name-overlay" id="name-overlay">
   <div class="name-box">
     <h2>Welcome to Cottage '26</h2>
-    <p>Who are you? This shows up next to your votes and comments.</p>
-    <input type="text" id="name-input" placeholder="Your name..." maxlength="20" onkeydown="if(event.key==='Enter')saveName()">
+    <p>Sign up once — your name shows next to votes, comments, and posts.</p>
+    <input type="text" id="name-input" placeholder="Your name..." maxlength="20">
+    <input type="email" id="email-input" placeholder="Your email..." maxlength="60" onkeydown="if(event.key==='Enter')saveName()">
     <button onclick="saveName()">Let's Go</button>
   </div>
 </div>
@@ -2534,21 +2776,90 @@ if (!visitorId) {
   localStorage.setItem('cottage_visitor_id', visitorId);
 }
 let visitorName = localStorage.getItem('cottage_visitor_name') || '';
+let visitorEmail = localStorage.getItem('cottage_visitor_email') || '';
 
 function saveName() {
-  const inp = document.getElementById('name-input');
-  const name = inp.value.trim();
-  if (!name) { inp.focus(); return; }
+  const nameInp = document.getElementById('name-input');
+  const emailInp = document.getElementById('email-input');
+  const name = nameInp.value.trim();
+  const email = emailInp.value.trim();
+  if (!name) { nameInp.focus(); return; }
+  if (!email || !email.includes('@')) { emailInp.focus(); return; }
   visitorName = name;
+  visitorEmail = email;
   localStorage.setItem('cottage_visitor_name', name);
+  localStorage.setItem('cottage_visitor_email', email);
+  // Save to Firebase so everyone sees who signed up
+  if (FB_READY) {
+    db.ref(`users/${visitorId}`).set({ name, email, joinedAt: Date.now() });
+  }
   document.getElementById('name-overlay').classList.add('hidden');
+  setupPresence();
+  renderSquadBar();
 }
+
 // Show name prompt if no name saved
 if (visitorName) {
   document.getElementById('name-overlay').classList.add('hidden');
 } else {
   setTimeout(() => document.getElementById('name-input').focus(), 300);
 }
+
+// ═══════════════════════════ PRESENCE + SQUAD BAR ═══════════════════════════
+let squadUsers = {}; // { visitorId: { name, email, online, lastSeen } }
+
+function setupPresence() {
+  if (!FB_READY || !visitorName) return;
+  const presRef = db.ref(`presence/${visitorId}`);
+  const connRef = db.ref('.info/connected');
+  connRef.on('value', snap => {
+    if (snap.val() === true) {
+      presRef.set({ name: visitorName, online: true, lastSeen: Date.now() });
+      presRef.onDisconnect().set({ name: visitorName, online: false, lastSeen: Date.now() });
+    }
+  });
+}
+
+function renderSquadBar() {
+  const bar = document.getElementById('squad-bar');
+  const members = Object.entries(squadUsers);
+  if (members.length === 0) {
+    bar.innerHTML = '<span class="squad-bar-label">Squad</span><span class="squad-name" style="color:rgba(250,245,236,0.3);font-size:0.7rem">No one signed up yet</span>';
+    return;
+  }
+  // Sort: online first, then by name
+  members.sort((a,b) => {
+    if (a[1].online !== b[1].online) return b[1].online ? 1 : -1;
+    return (a[1].name || '').localeCompare(b[1].name || '');
+  });
+  bar.innerHTML = '<span class="squad-bar-label">Squad</span>' +
+    members.map(([vid, u]) => {
+      const isYou = vid === visitorId;
+      return `<div class="squad-member">
+        <span class="squad-dot${u.online ? ' online' : ''}"></span>
+        <span class="squad-name${isYou ? ' is-you' : ''}">${u.name || 'Anon'}${isYou ? ' (you)' : ''}</span>
+      </div>`;
+    }).join('');
+}
+
+// Listen for users + presence
+if (FB_READY) {
+  db.ref('presence').on('value', snap => {
+    const data = snap.val() || {};
+    Object.entries(data).forEach(([vid, info]) => {
+      squadUsers[vid] = { ...squadUsers[vid], ...info };
+    });
+    renderSquadBar();
+  });
+  db.ref('users').on('value', snap => {
+    const data = snap.val() || {};
+    Object.entries(data).forEach(([vid, info]) => {
+      squadUsers[vid] = { ...squadUsers[vid], name: info.name, email: info.email };
+    });
+    renderSquadBar();
+  });
+}
+if (visitorName) setupPresence();
 
 // ═══════════════════════════ STATE ═══════════════════════════
 let groupSize = 10;
@@ -2732,7 +3043,7 @@ function buildMap() {
       tooltip.innerHTML = `
         <div class="map-tooltip-title">${l.kaisPick?'⭐ ':''}${l.title}</div>
         <div class="map-tooltip-area">${l.area} · ${l.location}</div>
-        <div class="map-tooltip-drive">🚗 ${l.driveHr} from Toronto</div>
+        <div class="map-tooltip-drive">🚗 ${l.driveHr} from Dundas</div>
       `;
       tooltip.classList.add('show');
     });
@@ -2821,7 +3132,7 @@ function renderCard(l, delay, rank) {
           <div class="price-main">$${l.price}<span>/night</span></div>
           <div class="price-total">$${l.price*3} total · 3 nights</div>
           <div class="price-person" id="ppp-${l.id}">≈ $${ppp(l)}/person/night</div>
-          <div class="drive-badge">🚗 ${l.driveHr} from Toronto</div>
+          <div class="drive-badge">🚗 ${l.driveHr} from Dundas</div>
         </div>
         <div class="vote-row">
           <div class="vote-btns">
@@ -3089,7 +3400,7 @@ function openCompare() {
     ['Price/night', l => `$${l.price}`, (vals) => { const min = Math.min(...vals.map(v=>+v.replace('$',''))); return vals.map(v=>+v.replace('$','')===min?'best':''); }],
     ['Total (3 nights)', l => `$${l.price*3}`],
     [`Per person (${groupSize})`, l => `$${ppp(l)}/night`, (vals) => { const min = Math.min(...vals.map(v=>+v.split('/')[0].replace('$',''))); return vals.map(v=>+v.split('/')[0].replace('$','')===min?'best':''); }],
-    ['Drive from Toronto', l => l.driveHr],
+    ['Drive from Dundas', l => l.driveHr],
     ['Beds', l => l.beds + ' beds', (vals) => { const max = Math.max(...vals.map(v=>+v)); return vals.map(v=>+v===max?'best':''); }],
     ['Guests', l => l.guests + ' max'],
     ['Rating', l => `⭐ ${l.rating}`, (vals) => { const max = Math.max(...vals.map(v=>+v.replace('⭐ ',''))); return vals.map(v=>+v.replace('⭐ ','')===max?'best':''); }],
@@ -3281,7 +3592,8 @@ function buildCalendar() {
     const who = allAvailability[d] ? Object.values(allAvailability[d]) : [];
     const count = who.length;
     const countHtml = count > 0 ? `<span class="cal-count">${count}</span>` : '';
-    html += `<div class="cal-day" data-day="${d}" title="${who.join(', ') || 'No one yet'}">${d}${countHtml}</div>`;
+    const tip = who.length ? `Unavailable: ${who.join(', ')}` : 'Everyone free!';
+    html += `<div class="cal-day" data-day="${d}" title="${tip}">${d}${countHtml}</div>`;
   }
 
   grid.innerHTML = html;
@@ -3380,23 +3692,31 @@ function updateCalSummary() {
   const myRange = getMyRange();
 
   if (myRange.length > 1) {
-    summary.textContent = `June ${myRange[0]}–${myRange[myRange.length-1]} (${myRange.length} nights)`;
+    summary.textContent = `Unavailable June ${myRange[0]}–${myRange[myRange.length-1]} (${myRange.length} days)`;
   } else if (myRange.length === 1) {
-    summary.textContent = `June ${myRange[0]} selected`;
+    summary.textContent = `Unavailable June ${myRange[0]}`;
   } else {
-    summary.textContent = '';
+    summary.textContent = 'No blackout dates — you\'re free all month!';
   }
 
-  // Find best overlap
-  let bestCount = 0;
-  let bestDays = [];
+  // Find best dates = days where FEWEST people are unavailable
+  // Count total users who submitted
+  const allUserIds = new Set();
   for (let d = 1; d <= JUNE_DAYS; d++) {
-    const who = allAvailability[d] ? Object.keys(allAvailability[d]).length : 0;
-    if (who > bestCount) { bestCount = who; bestDays = [d]; }
-    else if (who === bestCount && who > 0) bestDays.push(d);
+    if (allAvailability[d]) Object.keys(allAvailability[d]).forEach(id => allUserIds.add(id));
   }
+  const totalUsers = allUserIds.size;
 
-  if (bestCount >= 2 && bestDays.length > 0) {
+  if (totalUsers >= 1) {
+    // Find dates with fewest conflicts
+    let minConflicts = Infinity;
+    let bestDays = [];
+    for (let d = 1; d <= JUNE_DAYS; d++) {
+      const conflicts = allAvailability[d] ? Object.keys(allAvailability[d]).length : 0;
+      if (conflicts < minConflicts) { minConflicts = conflicts; bestDays = [d]; }
+      else if (conflicts === minConflicts) bestDays.push(d);
+    }
+
     bestEl.style.display = 'block';
     const ranges = [];
     let s = bestDays[0], e = bestDays[0];
@@ -3406,8 +3726,10 @@ function updateCalSummary() {
     }
     ranges.push(s === e ? `June ${s}` : `June ${s}–${e}`);
     document.getElementById('cal-best-dates').textContent = ranges.join(', ');
-    const names = allAvailability[bestDays[0]] ? Object.values(allAvailability[bestDays[0]]).join(', ') : '';
-    document.getElementById('cal-best-who').textContent = `${bestCount} people available: ${names}`;
+    const freeCount = totalUsers - minConflicts;
+    document.getElementById('cal-best-who').textContent = minConflicts === 0
+      ? `Everyone's free! (${totalUsers} people)`
+      : `${freeCount} of ${totalUsers} people free · ${minConflicts} conflict${minConflicts > 1 ? 's' : ''}`;
   } else {
     bestEl.style.display = 'none';
   }
@@ -3525,6 +3847,153 @@ if (FB_READY) {
   });
 }
 renderGallery();
+
+// ═══════════════════════════ TRIP JOURNAL ═══════════════════════════
+let journalPosts = [];
+let journalPhotos = []; // temp photos for compose
+
+function handleJournalPhotos(e) {
+  const files = Array.from(e.target.files);
+  files.forEach(file => {
+    if (!file.type.startsWith('image/')) return;
+    const reader = new FileReader();
+    reader.onload = (evt) => {
+      const img = new Image();
+      img.onload = () => {
+        const canvas = document.createElement('canvas');
+        const maxW = 800;
+        let w = img.width, h = img.height;
+        if (w > maxW) { h = h * maxW / w; w = maxW; }
+        canvas.width = w; canvas.height = h;
+        canvas.getContext('2d').drawImage(img, 0, 0, w, h);
+        const dataUrl = canvas.toDataURL('image/jpeg', 0.7);
+        journalPhotos.push(dataUrl);
+        renderJournalPreview();
+      };
+      img.src = evt.target.result;
+    };
+    reader.readAsDataURL(file);
+  });
+  e.target.value = '';
+}
+
+function renderJournalPreview() {
+  const preview = document.getElementById('journal-preview');
+  preview.innerHTML = journalPhotos.map(p =>
+    `<img src="${p}" alt="preview">`
+  ).join('');
+}
+
+function promptVideoUrl() {
+  const url = prompt('Paste a YouTube or video URL:');
+  if (!url) return;
+  journalPhotos.push('VIDEO:' + url);
+  const preview = document.getElementById('journal-preview');
+  preview.innerHTML += `<div class="video-preview">🎬 Video attached</div>`;
+}
+
+function getYouTubeEmbedUrl(url) {
+  let id = '';
+  const m = url.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/|youtube\.com\/embed\/)([a-zA-Z0-9_-]{11})/);
+  if (m) id = m[1];
+  return id ? `https://www.youtube.com/embed/${id}` : null;
+}
+
+function submitJournalPost() {
+  if (!visitorName) { document.getElementById('name-overlay').classList.remove('hidden'); return; }
+  const text = document.getElementById('journal-text').value.trim();
+  if (!text && journalPhotos.length === 0) return;
+
+  const photos = journalPhotos.filter(p => !p.startsWith('VIDEO:'));
+  const videos = journalPhotos.filter(p => p.startsWith('VIDEO:')).map(p => p.replace('VIDEO:', ''));
+
+  const post = {
+    author: visitorName,
+    authorId: visitorId,
+    text,
+    photos,
+    videos,
+    time: Date.now()
+  };
+
+  if (FB_READY) {
+    db.ref('journal').push(post);
+  } else {
+    journalPosts.unshift(post);
+    renderJournal();
+  }
+
+  // Clear compose
+  document.getElementById('journal-text').value = '';
+  journalPhotos = [];
+  document.getElementById('journal-preview').innerHTML = '';
+}
+
+function renderJournal() {
+  const feed = document.getElementById('journal-feed');
+  if (journalPosts.length === 0) {
+    feed.innerHTML = '<div class="journal-empty">No posts yet — be the first to share a moment! 📖</div>';
+    return;
+  }
+  feed.innerHTML = journalPosts.map((post, i) => {
+    const date = new Date(post.time);
+    const timeStr = `${date.toLocaleDateString()} · ${date.toLocaleTimeString([], {hour:'2-digit',minute:'2-digit'})}`;
+    const initial = (post.author || 'A')[0].toUpperCase();
+
+    let mediaHtml = '';
+    if (post.photos && post.photos.length > 0) {
+      if (post.photos.length === 1) {
+        mediaHtml += `<div class="journal-post-media"><img src="${post.photos[0]}" alt="post photo" onclick="openJournalLightbox(${i},0)"></div>`;
+      } else {
+        mediaHtml += `<div class="journal-post-media"><div class="journal-post-images">${
+          post.photos.map((p, pi) => `<img src="${p}" alt="photo" onclick="openJournalLightbox(${i},${pi})">`).join('')
+        }</div></div>`;
+      }
+    }
+    if (post.videos && post.videos.length > 0) {
+      post.videos.forEach(url => {
+        const embed = getYouTubeEmbedUrl(url);
+        if (embed) {
+          mediaHtml += `<div class="journal-post-media"><iframe src="${embed}" allowfullscreen></iframe></div>`;
+        } else {
+          mediaHtml += `<div class="journal-post-media"><a href="${url}" target="_blank" style="color:var(--lake);font-size:0.8rem;font-weight:700">🎬 Watch Video →</a></div>`;
+        }
+      });
+    }
+
+    return `<div class="journal-post">
+      <div class="journal-post-header">
+        <div class="journal-post-avatar">${initial}</div>
+        <div class="journal-post-meta">
+          <div class="journal-post-author">${post.author}</div>
+          <div class="journal-post-time">${timeStr}</div>
+        </div>
+      </div>
+      ${post.text ? `<div class="journal-post-body">${post.text.replace(/</g,'&lt;').replace(/\n/g,'<br>')}</div>` : ''}
+      ${mediaHtml}
+    </div>`;
+  }).join('');
+}
+
+function openJournalLightbox(postIdx, photoIdx) {
+  const post = journalPosts[postIdx];
+  if (!post || !post.photos) return;
+  lbCard = { photos: post.photos, title: post.author + "'s post", area: 'Trip Journal' };
+  lbPhotoIdx = photoIdx;
+  updateLb();
+  document.getElementById('lightbox').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+// Firebase listener for journal
+if (FB_READY) {
+  db.ref('journal').on('value', snap => {
+    const data = snap.val() || {};
+    journalPosts = Object.values(data).sort((a,b) => b.time - a.time);
+    renderJournal();
+  });
+}
+renderJournal();
 
 // ═══════════════════════════ WEATHER ═══════════════════════════
 const WEATHER_AREAS = [

@@ -1362,13 +1362,162 @@ footer {
 footer strong { color: var(--gold); }
 
 /* ═══════════════════════════ UTILITIES ═══════════════════════════ */
-@media (max-width: 640px) {
-  .listings-grid { grid-template-columns: 1fr; }
+/* ═══════════════════════════ MOBILE ═══════════════════════════ */
+@media (max-width: 768px) {
+  /* Hero */
+  .hero { min-height: 85vh; padding: 1.5rem; }
+  .hero-title { font-size: clamp(2.4rem, 12vw, 4rem); }
+  .hero-dates { font-size: 0.9rem; margin-bottom: 1.5rem; }
+  .hero-pills { gap: 0.5rem; margin-bottom: 2rem; }
+  .hero-pill { font-size: 0.75rem; padding: 6px 12px; }
+  .hero-cta { padding: 12px 24px; font-size: 0.8rem; }
+  .hero-badge { font-size: 0.6rem; padding: 5px 14px; }
+
+  /* Nav */
+  .sticky-nav {
+    padding: 0.6rem 1rem;
+    gap: 0.5rem;
+  }
+  .nav-logo { font-size: 1rem; }
   .nav-tabs { display: none; }
-  .compare-go-btn { font-size: 0.7rem; padding: 6px 14px; }
+  .nav-spacer { display: none; }
+  .group-widget { display: none; }
+  .compare-toggle { font-size: 0.65rem; padding: 4px 10px; }
+  .add-listing-btn { font-size: 0.7rem; padding: 5px 12px; }
+
+  /* Sections */
+  .section { padding: 2.5rem 1rem; }
+  .section-title { font-size: 1.5rem; }
+  .section-sub { font-size: 0.8rem; margin-bottom: 1.5rem; }
+  .section-eyebrow { font-size: 0.62rem; }
+
+  /* Listings */
+  .listings-grid { grid-template-columns: 1fr; gap: 1.25rem; }
+  .card-gallery { height: 220px; }
+  .card-body { padding: 1rem 1.1rem; }
+  .card-title { font-size: 1.05rem; }
+  .card-stats { gap: 0.6rem; font-size: 0.7rem; flex-wrap: wrap; }
+  .card-footer { flex-direction: column; align-items: flex-start; gap: 0.75rem; }
+  .vote-row { flex-direction: row; align-items: center; width: 100%; justify-content: space-between; }
+  .price-main { font-size: 1.35rem; }
+  .vibe-tags { gap: 3px; }
+  .vibe-tag { font-size: 0.6rem; padding: 2px 7px; }
+  .amenity-checks { gap: 4px 8px; }
+  .amenity { font-size: 0.65rem; }
+  .reactions-strip { padding: 0.6rem 1rem; }
+  .react-btn { padding: 2px 8px; font-size: 0.75rem; }
+  .comment-input { font-size: 0.7rem; padding: 4px 10px; }
+  .comment-submit { padding: 4px 10px; font-size: 0.68rem; }
+
+  /* Meme Wall */
+  .creativity-wrap { padding: 2.5rem 0; }
+  .creativity-inner { padding: 0 1rem; }
+  .upload-zone { padding: 0.8rem 1.2rem; }
+  .gallery-grid { grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 0.75rem; }
+  .gallery-item img { height: 150px; }
+  .gallery-item-footer { padding: 0.5rem 0.7rem; }
+  .gallery-item-name { font-size: 0.68rem; }
+
+  /* Calendar */
+  .calendar-wrap { padding: 2.5rem 0; }
+  .calendar-inner { padding: 0 1rem; }
   .cal-grid { gap: 3px; }
-  .cal-day { font-size: 0.75rem; }
-  .gallery-grid { grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); }
+  .cal-day { font-size: 0.75rem; border-radius: 8px; border-width: 1.5px; }
+  .cal-day .cal-count { font-size: 0.48rem; }
+  .cal-legend { gap: 0.8rem; margin-bottom: 1rem; }
+  .cal-legend-item { font-size: 0.68rem; gap: 5px; }
+  .cal-legend-swatch { width: 14px; height: 14px; border-radius: 4px; }
+  .cal-actions { gap: 0.75rem; }
+  .cal-done-btn { padding: 10px 20px; font-size: 0.8rem; }
+  .cal-names-row { padding: 0.8rem; }
+  .cal-names-row .cal-best-dates { font-size: 0.95rem; }
+
+  /* Leaderboard */
+  .leaderboard-wrap { padding: 2.5rem 1rem; }
+  .lb-title { font-size: 1.5rem; }
+  .lb-sub { font-size: 0.75rem; margin-bottom: 1.5rem; }
+  .lb-row { padding: 0.75rem 1rem; gap: 0.6rem; }
+  .lb-pos { font-size: 1.2rem; min-width: 30px; }
+  .lb-name { font-size: 0.82rem; }
+  .lb-bar-bg { width: 60px; }
+  .lb-score { font-size: 0.75rem; min-width: 50px; }
+
+  /* Map */
+  .map-section-wrap { padding: 2.5rem 0 0; }
+  .map-container { padding: 0 1rem 2rem; }
+  .map-canvas-wrap { height: 280px; border-radius: 14px; }
+  .drive-legend { gap: 0.8rem; margin-top: 0.8rem; }
+  .drive-item { font-size: 0.7rem; }
+
+  /* Weather */
+  .weather-wrap { padding: 2.5rem 0; }
+  .weather-inner { padding: 0 1rem; }
+  .weather-grid { grid-template-columns: 1fr; gap: 1rem; }
+  .weather-card { padding: 1.2rem; }
+  .weather-temp-now { font-size: 2rem; }
+  .weather-icon { font-size: 1.6rem; }
+  .weather-june-stats { gap: 0.5rem; }
+  .weather-stat { padding: 0.5rem 0.65rem; }
+  .weather-stat-value { font-size: 1rem; }
+
+  /* Weather Modal */
+  .weather-modal { padding: 0.75rem; }
+  .weather-modal-inner { border-radius: 16px; }
+  .weather-modal-header { padding: 1rem 1.25rem; }
+  .weather-modal-header h2 { font-size: 1rem; }
+  .weather-modal-body { padding: 1.25rem; }
+  .weather-day-row { padding: 0.5rem 0.6rem; gap: 0.4rem; flex-wrap: wrap; }
+  .weather-day-name { font-size: 0.7rem; min-width: 36px; }
+  .weather-day-date { font-size: 0.62rem; min-width: 40px; }
+  .weather-day-icon { font-size: 1.1rem; min-width: 24px; }
+  .weather-day-desc { font-size: 0.68rem; }
+  .weather-day-temps { font-size: 0.72rem; gap: 5px; }
+  .weather-day-precip { font-size: 0.62rem; min-width: 38px; }
+  .weather-note { font-size: 0.68rem; padding: 0.7rem 0.8rem; }
+
+  /* Compare Panel */
+  .compare-panel { padding: 0.75rem 1rem; }
+  .compare-panel-title { font-size: 0.8rem; }
+  .compare-go-btn { font-size: 0.7rem; padding: 6px 14px; }
+  .compare-chips { gap: 5px; }
+  .compare-chip { font-size: 0.65rem; padding: 2px 8px; }
+
+  /* Compare Modal */
+  .compare-modal { padding: 0.5rem; }
+  .compare-modal-inner { border-radius: 16px; }
+  .compare-modal-header { padding: 1rem 1.25rem; }
+  .compare-modal-header h2 { font-size: 1rem; }
+
+  /* Lightbox */
+  .lb-img { max-width: 95vw; max-height: 70vh; border-radius: 10px; }
+  .lb-close { top: -40px; width: 34px; height: 34px; }
+  .lb-arrow { width: 40px; height: 40px; font-size: 1rem; }
+
+  /* Add Listing Modal */
+  .add-modal { padding: 1.75rem; border-radius: 18px; }
+  .add-modal h2 { font-size: 1.3rem; }
+  .add-field input { padding: 10px 14px; font-size: 0.85rem; }
+
+  /* Name Prompt */
+  .name-box { padding: 2rem 1.5rem; border-radius: 18px; }
+  .name-box h2 { font-size: 1.3rem; }
+  .name-box input { padding: 12px 14px; font-size: 0.9rem; }
+
+  /* Footer */
+  footer { padding: 1.5rem 1rem; font-size: 0.65rem; }
+}
+
+/* Extra small screens */
+@media (max-width: 380px) {
+  .hero-title { font-size: 2rem; }
+  .sticky-nav { padding: 0.5rem 0.75rem; gap: 0.4rem; }
+  .cal-day { font-size: 0.65rem; }
+  .cal-day .cal-count { display: none; }
+  .cal-legend { flex-direction: column; gap: 0.4rem; }
+  .weather-current { gap: 0.6rem; }
+  .weather-temp-now { font-size: 1.7rem; }
+  .card-stats { font-size: 0.65rem; }
+  .lb-bar-bg { display: none; }
 }
 
 /* ═══════════════════════════ CALENDAR ═══════════════════════════ */

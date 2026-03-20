@@ -1189,6 +1189,13 @@ body {
   transition: all 0.2s;
   flex-shrink: 0;
   position: relative;
+  overflow: hidden;
+  padding: 0;
+}
+.nav-user-btn img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
 .nav-user-btn:hover { transform: scale(1.1); }
 .nav-user-btn.signed-out {
@@ -1211,11 +1218,26 @@ body {
   z-index: 600;
 }
 .user-menu.show { display: block; }
+.user-menu-avatar {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  margin: 0 auto 0.6rem;
+  overflow: hidden;
+  background: var(--parchment);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid var(--sand);
+}
+.user-menu-avatar img { width: 100%; height: 100%; object-fit: cover; }
+.user-menu-avatar span { font-size: 1.2rem; font-weight: 800; color: var(--text-soft); }
 .user-menu-name {
   font-weight: 700;
   font-size: 0.9rem;
   color: var(--charcoal);
   margin-bottom: 2px;
+  text-align: center;
 }
 .user-menu-email {
   font-size: 0.72rem;
@@ -1223,6 +1245,7 @@ body {
   margin-bottom: 0.8rem;
   padding-bottom: 0.8rem;
   border-bottom: 1px solid var(--sand);
+  text-align: center;
 }
 .user-menu-action {
   width: 100%;
@@ -1439,6 +1462,48 @@ body {
   cursor: pointer;
 }
 .name-box button:hover { background: var(--rust-light); }
+
+.avatar-picker {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 1.2rem;
+}
+.avatar-preview {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  background: var(--parchment);
+  border: 3px solid var(--sand);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  overflow: hidden;
+  transition: border-color 0.2s;
+}
+.avatar-preview:hover { border-color: var(--forest); }
+.avatar-preview img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.avatar-preview span {
+  font-size: 2rem;
+  font-weight: 800;
+  color: var(--text-soft);
+}
+.avatar-upload-btn {
+  background: none;
+  border: none;
+  color: var(--rust);
+  font-size: 0.72rem;
+  font-weight: 700;
+  cursor: pointer;
+  font-family: 'Nunito', sans-serif;
+}
+.avatar-upload-btn:hover { text-decoration: underline; }
 
 /* ═══════════════════════════ SQUAD BAR ═══════════════════════════ */
 .squad-bar {
@@ -2366,6 +2431,7 @@ footer strong { color: var(--gold); }
   <button class="add-listing-btn" onclick="openAddModal()">+ Add Listing</button>
   <button class="nav-user-btn" id="nav-user-btn" onclick="toggleUserMenu()"></button>
   <div class="user-menu" id="user-menu">
+    <div class="user-menu-avatar" id="user-menu-avatar"></div>
     <div class="user-menu-name" id="user-menu-name"></div>
     <div class="user-menu-email" id="user-menu-email"></div>
     <button class="user-menu-action" id="user-menu-action"></button>
@@ -2580,6 +2646,13 @@ footer strong { color: var(--gold); }
   <div class="name-box">
     <h2>Welcome to Cottage '26</h2>
     <p>Sign up once — your name shows next to votes, comments, and posts.</p>
+    <div class="avatar-picker" id="avatar-picker">
+      <div class="avatar-preview" id="avatar-preview" onclick="document.getElementById('avatar-file').click()">
+        <span id="avatar-preview-letter">?</span>
+      </div>
+      <button class="avatar-upload-btn" type="button" onclick="document.getElementById('avatar-file').click()">Upload Photo</button>
+      <input type="file" id="avatar-file" accept="image/*" hidden onchange="handleAvatarUpload(event)">
+    </div>
     <input type="text" id="name-input" placeholder="Your name..." maxlength="20">
     <input type="email" id="email-input" placeholder="Your email..." maxlength="60" onkeydown="if(event.key==='Enter')saveName()">
     <button onclick="saveName()">Let's Go</button>
@@ -2909,6 +2982,31 @@ if (!visitorId) {
 }
 let visitorName = localStorage.getItem('cottage_visitor_name') || '';
 let visitorEmail = localStorage.getItem('cottage_visitor_email') || '';
+let visitorAvatar = localStorage.getItem('cottage_visitor_avatar') || '';
+
+function handleAvatarUpload(e) {
+  const file = e.target.files[0];
+  if (!file || !file.type.startsWith('image/')) return;
+  const reader = new FileReader();
+  reader.onload = (evt) => {
+    const img = new Image();
+    img.onload = () => {
+      const canvas = document.createElement('canvas');
+      const size = 128;
+      canvas.width = size; canvas.height = size;
+      const ctx = canvas.getContext('2d');
+      const min = Math.min(img.width, img.height);
+      const sx = (img.width - min) / 2, sy = (img.height - min) / 2;
+      ctx.drawImage(img, sx, sy, min, min, 0, 0, size, size);
+      visitorAvatar = canvas.toDataURL('image/jpeg', 0.7);
+      const preview = document.getElementById('avatar-preview');
+      preview.innerHTML = `<img src="${visitorAvatar}" alt="avatar">`;
+    };
+    img.src = evt.target.result;
+  };
+  reader.readAsDataURL(file);
+  e.target.value = '';
+}
 
 function saveName() {
   const nameInp = document.getElementById('name-input');
@@ -2921,9 +3019,10 @@ function saveName() {
   visitorEmail = email;
   localStorage.setItem('cottage_visitor_name', name);
   localStorage.setItem('cottage_visitor_email', email);
+  localStorage.setItem('cottage_visitor_avatar', visitorAvatar);
   // Save to Firebase so everyone sees who signed up
   if (FB_READY) {
-    db.ref(`users/${visitorId}`).set({ name, email, joinedAt: Date.now() });
+    db.ref(`users/${visitorId}`).set({ name, email, avatar: visitorAvatar || '', joinedAt: Date.now() });
   }
   document.getElementById('name-overlay').classList.add('hidden');
   setupPresence();
@@ -2941,8 +3040,10 @@ if (visitorName) {
 function signOut() {
   visitorName = '';
   visitorEmail = '';
+  visitorAvatar = '';
   localStorage.removeItem('cottage_visitor_name');
   localStorage.removeItem('cottage_visitor_email');
+  localStorage.removeItem('cottage_visitor_avatar');
   if (FB_READY) {
     db.ref(`presence/${visitorId}`).set({ name: '', online: false, lastSeen: Date.now() });
   }
@@ -2955,6 +3056,8 @@ function signIn() {
   document.getElementById('name-overlay').classList.remove('hidden');
   document.getElementById('name-input').value = '';
   document.getElementById('email-input').value = '';
+  document.getElementById('avatar-preview').innerHTML = '<span id="avatar-preview-letter">?</span>';
+  visitorAvatar = '';
   setTimeout(() => document.getElementById('name-input').focus(), 100);
 }
 
@@ -2978,11 +3081,13 @@ function updateUserBtn() {
   const menuName = document.getElementById('user-menu-name');
   const menuEmail = document.getElementById('user-menu-email');
   const menuAction = document.getElementById('user-menu-action');
+  const menuAvatar = document.getElementById('user-menu-avatar');
 
   if (visitorName) {
-    btn.textContent = visitorName[0].toUpperCase();
+    btn.innerHTML = visitorAvatar ? `<img src="${visitorAvatar}" alt="${visitorName}">` : visitorName[0].toUpperCase();
     btn.className = 'nav-user-btn';
     btn.title = visitorName;
+    menuAvatar.innerHTML = visitorAvatar ? `<img src="${visitorAvatar}" alt="${visitorName}">` : `<span>${visitorName[0].toUpperCase()}</span>`;
     menuName.textContent = visitorName;
     menuEmail.textContent = visitorEmail || '';
     menuEmail.style.display = visitorEmail ? 'block' : 'none';
@@ -2990,9 +3095,10 @@ function updateUserBtn() {
     menuAction.className = 'user-menu-action sign-out';
     menuAction.onclick = signOut;
   } else {
-    btn.textContent = '→';
+    btn.innerHTML = '→';
     btn.className = 'nav-user-btn signed-out';
     btn.title = 'Sign in';
+    menuAvatar.innerHTML = '<span>?</span>';
     menuName.textContent = 'Not signed in';
     menuEmail.style.display = 'none';
     menuAction.textContent = 'Sign In';
@@ -3032,9 +3138,13 @@ function renderSquadBar() {
   bar.innerHTML = '<span class="squad-bar-label">Squad</span>' +
     members.map(([vid, u]) => {
       const isYou = vid === visitorId;
+      const avatarHtml = u.avatar
+        ? `<img src="${u.avatar}" style="width:20px;height:20px;border-radius:50%;object-fit:cover;flex-shrink:0">`
+        : `<span class="squad-dot${u.online ? ' online' : ''}"></span>`;
       return `<div class="squad-member">
-        <span class="squad-dot${u.online ? ' online' : ''}"></span>
+        ${avatarHtml}
         <span class="squad-name${isYou ? ' is-you' : ''}">${u.name || 'Anon'}${isYou ? ' (you)' : ''}</span>
+        ${u.avatar ? `<span class="squad-dot${u.online ? ' online' : ''}" style="width:6px;height:6px;margin-left:-2px"></span>` : ''}
       </div>`;
     }).join('');
 }
@@ -3051,7 +3161,7 @@ if (FB_READY) {
   db.ref('users').on('value', snap => {
     const data = snap.val() || {};
     Object.entries(data).forEach(([vid, info]) => {
-      squadUsers[vid] = { ...squadUsers[vid], name: info.name, email: info.email };
+      squadUsers[vid] = { ...squadUsers[vid], name: info.name, email: info.email, avatar: info.avatar || '' };
     });
     renderSquadBar();
   });
@@ -4166,6 +4276,9 @@ function renderJournal() {
     const date = new Date(post.time);
     const timeStr = `${date.toLocaleDateString()} · ${date.toLocaleTimeString([], {hour:'2-digit',minute:'2-digit'})}`;
     const initial = (post.author || 'A')[0].toUpperCase();
+    const postAvatar = post.authorId && squadUsers[post.authorId] && squadUsers[post.authorId].avatar
+      ? `<img src="${squadUsers[post.authorId].avatar}" style="width:100%;height:100%;object-fit:cover;border-radius:50%">`
+      : initial;
 
     let mediaHtml = '';
     if (post.photos && post.photos.length > 0) {
@@ -4191,7 +4304,7 @@ function renderJournal() {
     const canDelete = post.authorId === visitorId;
     return `<div class="journal-post">
       <div class="journal-post-header">
-        <div class="journal-post-avatar">${initial}</div>
+        <div class="journal-post-avatar">${postAvatar}</div>
         <div class="journal-post-meta">
           <div class="journal-post-author">${post.author}</div>
           <div class="journal-post-time">${timeStr}</div>
